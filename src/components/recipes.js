@@ -3,11 +3,19 @@ import React, {Component} from 'react'
 class Recipes extends Component {
     constructor() {
         super()
-        this.state = {data: []}
+        this.state = {data: ''
+    }
+   }
+    
+    componentDidMount() {
+        fetch('/test').then(response => response.json()).then(result => {
+            this.setState({data: result.test})
+        }) 
     }
     render() {
+        console.log(this.state.data)
         return (
-            <p>This is your recipes</p>
+        <p>{this.state.data}</p>
         )
     }
 }

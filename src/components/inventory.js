@@ -18,7 +18,7 @@ class Inventory extends React.Component {
     }
 
     render() {
-        const items = this.state.data.map(item => <InventoryItem info={item}/>)
+        const items = this.state.data.map(item => <InventoryItem info={item} key={item.id}/>)
         return (
         <HashRouter>
             <NavLink to= '/inventory/edit'>Edit</NavLink>
