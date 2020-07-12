@@ -1,4 +1,5 @@
-from app import db
+from app import db, ma
+from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -24,3 +25,15 @@ class Ingredient(db.Model):
     measurement = db.Column(db.String(50), nullable=False)
     url = db.Column(db.String(200))
     inventory_id = db.Column(db.Integer, db.ForeignKey('inventory.id'))
+
+    def __init__(self, name, quantity, measurement, url, inventory_id):
+        self.name = name
+        self.quantity = quantity
+        self.measurement = measurement
+        self.url = url
+        self.inventory_id = inventory_id
+    
+
+class IngredientSchema(SQLAlchemyAutoSchema):
+    class Meta:
+        model = Ingredient     
