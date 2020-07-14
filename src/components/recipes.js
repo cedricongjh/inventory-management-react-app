@@ -7,15 +7,9 @@ class Recipes extends Component {
     }
    }
     
-    componentDidMount() {
-        fetch('/test').then(response => response.json()).then(result => {
-            this.setState({data: result.test})
-        }) 
-    }
     render() {
-        console.log(this.state.data)
         return (
-        <p>{this.state.data}</p>
+        <p>this page is for Recipes</p>
         )
     }
 }

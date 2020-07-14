@@ -56,8 +56,45 @@ body {
   justify-content: flex-end;
   align-items: center;
   padding-bottom: 2em;
+  position: relative;
+  text-align: center;
 }
 
 .ingredient:hover {
   box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+.plus-button {
+  border: #D3D3D3;
+  color: #FFF;
+  background-color: rgb(0, 0, 0);
+	font-size: 16px;
+	height: 2em;
+	width: 2em;
+  border-radius: 999px;
+  text-align: center;
+  position: absolute;
+  bottom: 50%;
+  display: inline-block;
+}  
+
+.inventory-button-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.inventory-save-button {
+  display: flex;
+  background-color: darkgreen;
+  color: white;
+  font-family: 'Roboto Slab', serif;
+}
+
+.inventory-cancel-button {
+  display: flex;
+  background-color: darkred;
+  color: white;
+  font-family: 'Roboto Slab', serif;
 }
