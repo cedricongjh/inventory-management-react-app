@@ -31,11 +31,11 @@ function InventoryForm(props) {
                     placeholder="measurement"
                     onChange={(event) => props.data.handleChange(event, props.data.info.id)}></input>
                 </div>    
-                <div className="inventory-button-container">
+            </form>
+            <div className="inventory-button-container">
                 <button className="inventory-save-button" onClick={() => props.data.handleSubmit(props.data.info.id)}>SAVE</button>
                 <button className="inventory-cancel-button" onClick={() => props.data.handleCancel(props.data.info.id)}>CANCEL</button>
-                </div>
-            </form>
+            </div>
         </div>
     )
 }

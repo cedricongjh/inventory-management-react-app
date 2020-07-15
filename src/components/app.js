@@ -1,5 +1,5 @@
 import React, {Component} from "react"
-import Inventory from './inventory'
+import Inventory from './inventory/inventory'
 import Recipes from './recipes'
 import {Route, NavLink, HashRouter} from 'react-router-dom'
 

@@ -6,7 +6,7 @@ function InventoryItem(props) {
     <div className="ingredient"><InventoryForm data={props} /></div> :
     props.info.name ?
     (<div className="ingredient" onClick={() => props.handleClick(props.info.id)}>
-    <img src={props.info.image} alt="ingredient"/>       
+    <img src={props.info.url} alt="ingredient"/>       
     <div>{props.info.name}</div>
     <div>{props.info.quantity} {props.info.measurement}</div>
     </div>)
