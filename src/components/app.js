@@ -1,6 +1,6 @@
 import React, {Component} from "react"
 import Inventory from './inventory/inventory'
-import Recipes from './recipes'
+import Recipes from './recipes/recipes'
 import {Route, NavLink, HashRouter} from 'react-router-dom'
 
 class App extends Component {

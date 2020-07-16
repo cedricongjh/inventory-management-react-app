@@ -1,52 +1,69 @@
 const items = [
                 {id : 1,
-                name: 'macadamias', 
-                quantity: 5, 
-                measurement: 'cup',
-                image: "/images/macadamias.png"
-                },
-
+                name: 'Chocolate PB oats', 
+                image_url: '/images/chocolate_pb_oats.png',
+                categories: ['breakfast', 'vegan'],
+                ingredients: [{name: 'rolled oats',
+                               quantity: 0.75,
+                               measurement: 'cup'
+                              },
+                              {name: 'cocoa powder',
+                               quantity: 1,
+                               measurement: 'cup'
+                              }, 
+                              {name: 'banana',
+                              quantity: 1,
+                              measurement: 'pcs'
+                              },
+                              {name: 'strawberry',
+                              quantity: 1,
+                              measurement: 'cup'},
+                              {name: 'peanut butter',
+                              quantity: 1,
+                              measurement: 'serving'}
+                             ],
+                time: 10,
+                servings: 1,             
+                description: 'Yummy peanut butter oats to start the day with',
+                instructions: ['Cut up strawberries and bananas', 
+                               'Bring water to a boil in a pot', 
+                               'Cook oats for 3 mins, mixing in cocoa powder',
+                               'Pour the oats into a bowl. Add bananas and strawberries, and peanut butter to top it off and serve']
+                }, 
                 {id : 2,
-                name: 'carrot',
-                quantity: 5,
-                measurement: 'pcs',
-                image: "/images/carrot.png"},
-
-                {id : 3,
-                name: 'nutritional yeast',
-                quantity: 5,
-                measurement: 'cup',
-                image: "/images/nutritional_yeast.png"},
-
-                {id: 4,
-                 name: 'white vinegar',
-                 quantity: 100,
-                 measurement: 'tsp',
-                 image: "/images/white_vinegar.png"},
-
-                {id: 5,
-                 name: 'salt',
-                 quantity: 100,
-                 measurement: 'tsp',
-                 image: "/images/salt.png"},
-
-                {id : 6,
-                 name: 'ground nutmeg',
-                 quantity: 10,
-                 measurement: 'tsp',
-                 image: "/images/ground_nutmeg.png"},
-
-                {id: 7,
-                 name: 'pasta',
-                 quantity: 10,
-                 measurement: 'servings',
-                 image: "/images/pasta.png"},
-                 
-                {id: 8,
-                 name: 'rolled oats',
-                 quantity: 10,
-                 measurement: 'cup',
-                 image: "/images/rolled_oats.png"}                
+                    name: 'Vegan mac and cheese', 
+                    image_url: '/images/vegan_mac_and_cheese.png',
+                    categories: ['lunch', 'dinner', 'vegan', 'breakfast'],
+                    ingredients: [{name: 'macadamias',
+                                   quantity: 0.5,
+                                   measurement: 'cup'
+                                  },
+                                  {name: 'carrot',
+                                   quantity: 1,
+                                   measurement: 'pcs'
+                                  }, 
+                                  {name: 'nutritional yeast',
+                                  quantity: 0.25,
+                                  measurement: 'cup'
+                                  },
+                                  {name: 'white vinegar',
+                                  quantity: 1,
+                                  measurement: 'tsp'},
+                                  {name: 'ground nutmeg',
+                                  quantity: 0.125,
+                                  measurement: 'tsp'},
+                                  {name: 'pasta',
+                                  quantity: 3,
+                                  measurement: 'serving'},  
+                                 ],
+                    time: 20,
+                    servings: 2,             
+                    description: 'Heathy and low-carb vegan man and cheese',
+                    instructions: ['Add macadamias, carrot, nutritional yeast, white vinegar, ground nutmeg into a blender and blend to create the vegan cheese sauce', 
+                                   'Boil water and add the pasta in. Cook for 5 mins', 
+                                   'Place the pasta in a bowl, pour the cheese sauce over it and serve'
+                                  ] 
+                }               
                 ] 
  
 export default items
