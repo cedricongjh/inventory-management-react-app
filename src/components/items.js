@@ -24,7 +24,7 @@ const items = [
                              ],
                 time: 10,
                 servings: 1,             
-                description: 'Yummy peanut butter oats to start the day with',
+                description: 'Yummy peanut butter oats to start the day with.',  
                 instructions: ['Cut up strawberries and bananas', 
                                'Bring water to a boil in a pot', 
                                'Cook oats for 3 mins, mixing in cocoa powder',
@@ -58,7 +58,7 @@ const items = [
                                  ],
                     time: 20,
                     servings: 2,             
-                    description: 'Heathy and low-carb vegan man and cheese',
+                    description: 'Healthy and low-carb vegan mac and cheese',
                     instructions: ['Add macadamias, carrot, nutritional yeast, white vinegar, ground nutmeg into a blender and blend to create the vegan cheese sauce', 
                                    'Boil water and add the pasta in. Cook for 5 mins', 
                                    'Place the pasta in a bowl, pour the cheese sauce over it and serve'

@@ -128,3 +128,75 @@ body {
   margin-right: auto;
   padding-top: 1em;
 }
+
+.recipe-page-container {
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.recipe-page-image {
+  padding-top: 1em;
+  margin-left: 25%;
+  margin-right: 47%;
+  max-width: 100%;
+  height: auto;
+  width: auto;
+}
+
+.sidenav {
+  width: 130px;
+  position: fixed;
+  z-index: 1;
+  top: 17rem;
+  right: 45rem;
+  background: #eee;
+  overflow-x: hidden;
+  padding: 8px 8px;
+  float: right;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.recipe-cook-button {
+  background-color: darkgreen;
+  color: white;
+  font-family: 'Roboto Slab', serif;
+}
+
+.recipe-edit-button {
+  background-color: darkgreen;
+  color: white;
+  font-family: 'Roboto Slab', serif;
+}
+
+.recipe-categories {
+  display: flex;
+  flex-direction: row;
+  font-size: 16px;
+  font-family: 'Roboto Slab', serif;
+}
+
+.recipe-header{
+  font-size: 32px;
+  font-family: 'Roboto Slab', serif;
+}
+
+.recipe-page-description {
+  margin-left: 25%;
+  margin-right: 47%;
+  padding-top: 1em;
+  font-size: 16px;
+  font-family: 'Roboto Slab', serif;
+}
+
+.ingredients-container{
+  margin-left: 25%;
+  margin-right: 47%;
+  font-size: 16px;
+  font-family: 'Roboto Slab', serif;
+}
