@@ -3,6 +3,7 @@ import Inventory from './inventory/inventory'
 import Recipes from './recipes/recipes'
 import {Route, NavLink, HashRouter} from 'react-router-dom'
 import RecipeView from './recipes/recipe_view'
+import RecipeForm from './recipes/recipe_form'
 import items from './items'
 
 class App extends Component {
@@ -29,7 +30,7 @@ class App extends Component {
             <li><NavLink to="/recipes">Recipes</NavLink></li>
           </ul>
           <div className="content">
-             <Route exact path='/'></Route>
+             <Route exact path='/' component={RecipeForm}></Route>
              <Route path='/inventory' component={Inventory}></Route>
              <Route exact path='/recipes' component={Recipes}></Route>
              {recipeLinks}
