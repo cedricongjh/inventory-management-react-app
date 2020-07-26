@@ -1,6 +1,5 @@
 import React from "react"
 import InventoryItem from './inventoryitem'
-// import items from '../items'
 
 
 class Inventory extends React.Component {

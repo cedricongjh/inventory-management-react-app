@@ -2,8 +2,10 @@ import React from 'react'
 import { Formik, Form, Field, ErrorMessage, FieldArray } from 'formik'
 import * as yup from 'yup'
 
-function RecipeForm() {
-    const initialValues = {
+// add styling for form
+
+function RecipeForm(props) {
+    const initialValues = props.data? props.data : {
         name: '',
         categories: [''],
         description: '',
@@ -14,8 +16,9 @@ function RecipeForm() {
             quantity: '',
             measurement: ''
         }],
-        directions: ['']
+        instructions: ['']
     }
+    console.log(initialValues)
     const onSubmit = (values) => {
         console.log(values)
     }
@@ -33,7 +36,7 @@ function RecipeForm() {
             quantity: yup.number().required('Required').typeError('Please input numerial values'),
             measurement: yup.string().required('Required')
         })).min(1, 'requires at least one ingredient'),
-        directions: yup.array().of(yup.string())
+        instructions: yup.array().of(yup.string())
     })
     return (
         <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
@@ -132,19 +135,19 @@ function RecipeForm() {
                         }
                     </FieldArray>
                     
-                    <label htmlFor="directions">Directions: </label>
-                    <FieldArray name="directions">
+                    <label htmlFor="instructions">Directions: </label>
+                    <FieldArray name="instructions">
                         {fieldArrayProps => {
                             const { push, remove, form } = fieldArrayProps
                             const { values } = form
-                            const { directions } = values
+                            const { instructions } = values
                             return(
                                 <div>
-                                    {directions.map((direction, index)=> {
+                                    {instructions.map((direction, index)=> {
                                         return(
                                             <div key={index}>
-                                            <label htmlFor={`directions[${index}]`}>Step {index+1}: </label>
-                                            <Field as="textarea" name={`directions[${index}]`}/>
+                                            <label htmlFor={`instructions[${index}]`}>Step {index+1}: </label>
+                                            <Field as="textarea" name={`instructions[${index}]`}/>
                                             {index > 0 ? <button type="button" onClick={() => remove(index)}>-</button> : null}
                                             <button type="button" onClick={() => push('')}>+</button>
                                             </div>
@@ -157,7 +160,7 @@ function RecipeForm() {
                         }}
 
                     </FieldArray>
-                    <ErrorMessage name="directions"/>
+                    <ErrorMessage name="instructions"/>
                 </div>
 
                 <button type="submit">Sumbit</button>

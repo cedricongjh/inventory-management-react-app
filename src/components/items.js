@@ -22,7 +22,7 @@ const items = [
                               quantity: 1,
                               measurement: 'serving'}
                              ],
-                time: 10,
+                time: {hours: 0, minutes: 10},
                 servings: 1,             
                 description: 'Yummy peanut butter oats to start the day with.',  
                 instructions: ['Cut up strawberries and bananas', 
@@ -56,7 +56,7 @@ const items = [
                                   quantity: 3,
                                   measurement: 'serving'},  
                                  ],
-                    time: 20,
+                    time: {hours: 0, minutes: 20},
                     servings: 2,             
                     description: 'Healthy and low-carb vegan mac and cheese',
                     instructions: ['Add macadamias, carrot, nutritional yeast, white vinegar, ground nutmeg into a blender and blend to create the vegan cheese sauce', 

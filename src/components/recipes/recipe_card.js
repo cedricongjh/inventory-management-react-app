@@ -16,7 +16,7 @@ function RecipeCard(props){
             <div style={{display: 'flex', justifyContent:'space-between', marginLeft: '5%', marginRight: '5%'}}>
                 <div style={{display: 'flex'}}>{props.data.name}</div>
                 <div style={{display: 'flex'}}>
-                    <img style={{width: "1em", height: "1em", paddingTop: "0.2em", paddingRight: "0.1em"}} src='\images\clock.png' alt="clock" />{props.data.time}min
+                    <img style={{width: "1em", height: "1em", paddingTop: "0.2em", paddingRight: "0.1em"}} src='\images\clock.png' alt="clock" />{props.data.time.minutes}min
                 </div>
             </div>
             <div style={{marginLeft: '5%'}}>Servings: {props.data.servings}</div>
