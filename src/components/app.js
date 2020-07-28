@@ -8,17 +8,27 @@ import items from './items'
 class App extends Component {
     constructor() {
       super()
-      this.state = {data: []}
+      this.state = {recipeData: [],
+                    inventoryData: []}
+      this.updateInventory = this.updateInventory.bind(this)              
     }
 
     componentDidMount() {
-        this.setState({data: items})
+      // get recipe data from API
+        this.setState({recipeData: items})
+        fetch('/inventory').then(response => response.json()).then(result => {
+          this.setState({inventoryData: result})
+        })
+    }
+
+    updateInventory(data){
+        this.setState({inventoryData: data})
     }
 
     render() {
-        const recipeLinks = this.state.data.map(item => {
+        const recipeLinks = this.state.recipeData.map(item => {
           let recipeData = item
-          return(<Route exact path={'/recipes/'+ item.name}  key={item.name} render={(props) => <RecipeView {...props} data={recipeData}/>} />)
+          return(<Route exact path={'/recipes/'+ item.name}  key={item.name} render={(props) => <RecipeView {...props} data={recipeData} inventoryData={this.state.inventoryData}/>} />)
         })
         return(
         <HashRouter>
@@ -30,7 +40,7 @@ class App extends Component {
           </ul>
           <div className="content">
              <Route exact path='/'></Route>
-             <Route path='/inventory' component={Inventory}></Route>
+             <Route path='/inventory' render={(props) => <Inventory {...props} update={this.updateInventory}/>}></Route>
              <Route exact path='/recipes' component={Recipes}></Route>
              {recipeLinks}
           </div>

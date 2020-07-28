@@ -8,7 +8,7 @@ function PopUpCook(props) {
             <span className="close" onClick={() => props.handleClick('cookPopup')}>
             X
             </span>
-                <RecipeCook data={props.data}/>
+                <RecipeCook data={props.data} inventoryData={props.inventoryData}/>
             </div>
         </div>
     )

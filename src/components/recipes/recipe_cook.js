@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import ingredients from './test_ingredients'
 
 class RecipeCook extends Component {
 
@@ -9,7 +8,9 @@ class RecipeCook extends Component {
             servings: '',
             cook: '',
             maxTimes: '',
-            errors: []
+            errors: [],
+            inventoryData: [],
+            recipeData: []
         }
         this.cooking = this.cooking.bind(this)
         this.onChange = this.onChange.bind(this)
@@ -17,7 +18,7 @@ class RecipeCook extends Component {
 
     // take ingredient data from somewhere
     componentDidMount() {
-        this.cooking(ingredients, 1)
+        this.setState({inventoryData: this.props.inventoryData}, this.cooking(this.props.inventoryData, 1, false))
     }
 
     onChange(event, change) {
@@ -54,7 +55,7 @@ class RecipeCook extends Component {
                     )
                 }
             )
-        }   
+        }
     }
 
     cooking(ingredientData, multiplier, cooking) {
@@ -113,7 +114,6 @@ class RecipeCook extends Component {
             if (newIngredients.length === recipeIngredients.length) {
                 this.setState({ cook: 1 })
                 this.setState({servings: this.props.data.servings})
-                console.log(this.state.servings)
                 this.setState({ maxTimes: Math.min(...maxTimes) })
             }
             else {
@@ -133,7 +133,7 @@ class RecipeCook extends Component {
                     <button className="recipe-cook-button" type="text" name="cook" value={this.state.cook} onClick={(event) => this.onChange(event, 1)}>+</button>
                     <button className="recipe-cook-button" type="text" name="cook" value={this.state.cook} onClick={(event) => this.onChange(event, parseInt(this.state.maxTimes - this.state.cook))}>MAX</button>
                     <div>
-                        <button className="recipe-cook-button" onClick={() => this.cooking(ingredients, this.state.cook, true)}>COOK</button>
+                        <button className="recipe-cook-button" onClick={() => this.cooking(this.state.inventoryData, this.state.cook, true)}>COOK</button>
                     </div>
                 </div>
                 <h3 style={{ display: 'flex', justifyContent: 'center' }}>Servings: </h3>
@@ -143,7 +143,7 @@ class RecipeCook extends Component {
                     <button className="recipe-cook-button" type="text" name="servings" value={this.state.servings} onClick={(event) => this.onChange(event, 1)}>+</button>
                     <button className="recipe-cook-button" type="text" name="servings" value={this.state.servings} onClick={(event) => this.onChange(event, parseInt(this.state.maxTimes * this.props.data.servings - this.state.servings))}>MAX</button>
                     <div>
-                        <button className="recipe-cook-button" onClick={() => this.cooking(ingredients, this.state.cook, true)}>COOK</button>
+                        <button className="recipe-cook-button" onClick={() => this.cooking(this.state.inventoryData, this.state.cook, true)}>COOK</button>
                     </div>
                 </div>    
                 <div style={{display: 'flex', alignItems: 'center', flexDirection: 'column'}}>

@@ -120,7 +120,7 @@ class Inventory extends React.Component {
                             return {
                                 data: updatedData
                             }
-                        })
+                        }, this.props.update(this.state.data))
                     }
                     return response.json()
                 })
@@ -149,7 +149,7 @@ class Inventory extends React.Component {
                             return {
                                 data: updatedData
                             }
-                        })
+                        }, this.props.update(this.state.data))
                     }
                     return response.json()
                 })
