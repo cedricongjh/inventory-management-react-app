@@ -41,8 +41,8 @@ class RecipeCook extends Component {
         this.setState(
             prevState => {
                 return (
-                    prevState["cook"] = parseInt(newValue),
-                    prevState["servings"] = parseInt(newValue * this.props.data.servings)
+                    prevState["cook"] = parseFloat(newValue),
+                    prevState["servings"] = parseFloat(newValue * this.props.data.servings)
                 )
             })
         }
@@ -50,7 +50,7 @@ class RecipeCook extends Component {
             this.setState(
                 prevState => {
                     return(
-                        prevState["servings"] = parseInt(newValue),
+                        prevState["servings"] = parseFloat(newValue),
                         prevState["cook"] = parseFloat(newValue / this.props.data.servings)
                     )
                 }
@@ -75,6 +75,7 @@ class RecipeCook extends Component {
                         var newQuantity = dict[ingredient.name].quantity - ingredient.quantity * multiplier
                         newIngredients.push({ ...ingredient })
                         newIngredients[newIngredients.length - 1].quantity = newQuantity
+                        newIngredients[newIngredients.length - 1].id = dict[ingredient.name].id
                         maxTimes.push(Math.floor(dict[ingredient.name].quantity / ingredient.quantity))
                     }
                     else {
@@ -91,8 +92,40 @@ class RecipeCook extends Component {
             if (newIngredients.length === recipeIngredients.length) {
                 console.log(`You have cooked ${multiplier * this.props.data.servings} serving(s) of ${this.props.data.name}`)
                 this.setState({ errors: [] })
-            }
-            // also if not enough ingredients, give option for user to add the lacking ingredients
+                // PATCH requests for new quantities of ingredients and update state
+                newIngredients.forEach(ingredient => {
+                    fetch('/item/' + ingredient.id, {
+                        method: "PATCH",
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(ingredient)
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                          return response.json()  
+                        }
+                    })
+                    .then(data => {
+                        console.log('success', data)
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                    })
+                })
+                // make sure state is updated in this component as well
+                let inventoryData = this.state.inventoryData
+                newIngredients.forEach(ingredient => {                   
+                    for (let i = 0; i < inventoryData.length; i++) {
+                        if(inventoryData[i].id === ingredient.id) {
+                            inventoryData[i].quantity = ingredient.quantity     
+                        }
+                    }
+                })
+                this.setState({inventoryData: inventoryData}, this.props.updateInventory(this.state.inventoryData))
+                this.setState(prevState => {
+                    return{maxTimes: prevState.maxTimes - multiplier}
+                })              
+            }   
+            // if not enough ingredients, give option for user to add the lacking ingredients
             Object.keys(lacking).forEach(ingredient => {
                 if (!lacking[ingredient].notIn) {
                     this.setState(prevState => {

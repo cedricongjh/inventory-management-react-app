@@ -21,7 +21,7 @@ class Inventory(db.Model):
 class Ingredient(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), unique=True, nullable=False)
-    quantity = db.Column(db.Integer)
+    quantity = db.Column(db.Float)
     measurement = db.Column(db.String(50), nullable=False)
     url = db.Column(db.String(200))
     inventory_id = db.Column(db.Integer, db.ForeignKey('inventory.id'))

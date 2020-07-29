@@ -22,13 +22,14 @@ class App extends Component {
     }
 
     updateInventory(data){
-        this.setState({inventoryData: data})
+        this.setState({inventoryData: data}, console.log(this.state.inventoryData))
     }
 
     render() {
         const recipeLinks = this.state.recipeData.map(item => {
           let recipeData = item
-          return(<Route exact path={'/recipes/'+ item.name}  key={item.name} render={(props) => <RecipeView {...props} data={recipeData} inventoryData={this.state.inventoryData}/>} />)
+          return(<Route exact path={'/recipes/'+ item.name}  key={item.name} render={(props) => <RecipeView {...props} data={recipeData} inventoryData={this.state.inventoryData}
+          updateInventory={this.updateInventory}/>} />)
         })
         return(
         <HashRouter>
@@ -39,11 +40,12 @@ class App extends Component {
             <li><NavLink to="/recipes">Recipes</NavLink></li>
           </ul>
           <div className="content">
-             <Route exact path='/'></Route>
+             <Route exact path='/'><div>THIS IS THE HOME PAGE</div></Route>
              <Route path='/inventory' render={(props) => <Inventory {...props} update={this.updateInventory}/>}></Route>
              <Route exact path='/recipes' component={Recipes}></Route>
              {recipeLinks}
           </div>
+          
         </HashRouter>
             
         )
