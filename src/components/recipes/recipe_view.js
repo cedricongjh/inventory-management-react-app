@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
-import PopUpForm from './popup_form'
-import PopUpEdit from './popup_edit'
-import PopUpCook from './popup_cook'
+import PopUpForm from './recipe_form_components/popup_form'
+import PopUpEdit from './recipe_form_components/popup_edit'
+import PopUpCook from './cooking_component/popup_cook'
 
 
 class RecipeView extends Component {
