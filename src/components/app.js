@@ -4,6 +4,7 @@ import Recipes from './recipes/recipes'
 import {Route, NavLink, HashRouter} from 'react-router-dom'
 import RecipeView from './recipes/recipe_view'
 import items from './items'
+import LackingContainer from "./recipes/cooking_component/error_messages/lacking_container"
 
 class App extends Component {
     constructor() {
@@ -40,7 +41,7 @@ class App extends Component {
             <li><NavLink to="/recipes">Recipes</NavLink></li>
           </ul>
           <div className="content">
-             <Route exact path='/'><div>THIS IS THE HOME PAGE</div></Route>
+             <Route exact path='/' component={LackingContainer}></Route>
              <Route path='/inventory' render={(props) => <Inventory {...props} update={this.updateInventory}/>}></Route>
              <Route exact path='/recipes' component={Recipes}></Route>
              {recipeLinks}

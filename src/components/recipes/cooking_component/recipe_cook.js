@@ -18,7 +18,7 @@ class RecipeCook extends Component {
 
     // take ingredient data from somewhere
     componentDidMount() {
-        this.setState({inventoryData: this.props.inventoryData}, this.cooking(this.props.inventoryData, 1, false))
+        this.setState({ inventoryData: this.props.inventoryData }, this.cooking(this.props.inventoryData, 1, false))
     }
 
     onChange(event, change) {
@@ -38,18 +38,18 @@ class RecipeCook extends Component {
             newValue = 0
         }
         if (name === "cook") {
-        this.setState(
-            prevState => {
-                return (
-                    prevState["cook"] = parseFloat(newValue),
-                    prevState["servings"] = parseFloat(newValue * this.props.data.servings)
-                )
-            })
+            this.setState(
+                prevState => {
+                    return (
+                        prevState["cook"] = parseFloat(newValue),
+                        prevState["servings"] = parseFloat(newValue * this.props.data.servings)
+                    )
+                })
         }
         if (name === "servings") {
             this.setState(
                 prevState => {
-                    return(
+                    return (
                         prevState["servings"] = parseFloat(newValue),
                         prevState["cook"] = parseFloat(newValue / this.props.data.servings)
                     )
@@ -79,11 +79,11 @@ class RecipeCook extends Component {
                         maxTimes.push(Math.floor(dict[ingredient.name].quantity / ingredient.quantity))
                     }
                     else {
-                        lacking[ingredient.name] = { quantity: (ingredient.quantity * multiplier - dict[ingredient.name].quantity), notIn: false }
+                        lacking[ingredient.name] = { quantity: (ingredient.quantity * multiplier - dict[ingredient.name].quantity), notIn: false, measurement: ingredient.measurement }
                     }
                 }
                 else {
-                    lacking[ingredient.name] = { notIn: true }
+                    lacking[ingredient.name] = { notIn: true, quantity: ingredient.quantity, measurement: ingredient.measurement }
                 }
             }
         )
@@ -99,54 +99,56 @@ class RecipeCook extends Component {
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(ingredient)
                     })
-                    .then(response => {
-                        if (response.ok) {
-                          return response.json()  
-                        }
-                    })
-                    .then(data => {
-                        console.log('success', data)
-                    })
-                    .catch((error) => {
-                        console.error('Error:', error);
-                    })
+                        .then(response => {
+                            if (response.ok) {
+                                return response.json()
+                            }
+                        })
+                        .then(data => {
+                            console.log('success', data)
+                        })
+                        .catch((error) => {
+                            console.error('Error:', error);
+                        })
                 })
                 // make sure state is updated in this component as well
                 let inventoryData = this.state.inventoryData
-                newIngredients.forEach(ingredient => {                   
+                newIngredients.forEach(ingredient => {
                     for (let i = 0; i < inventoryData.length; i++) {
-                        if(inventoryData[i].id === ingredient.id) {
-                            inventoryData[i].quantity = ingredient.quantity     
+                        if (inventoryData[i].id === ingredient.id) {
+                            inventoryData[i].quantity = ingredient.quantity
                         }
                     }
                 })
-                this.setState({inventoryData: inventoryData}, this.props.updateInventory(this.state.inventoryData))
+                this.setState({ inventoryData: inventoryData }, this.props.updateInventory(this.state.inventoryData))
                 this.setState(prevState => {
-                    return{maxTimes: prevState.maxTimes - multiplier}
-                })              
-            }   
+                    return { maxTimes: prevState.maxTimes - multiplier }
+                })
+            }
             // if not enough ingredients, give option for user to add the lacking ingredients
-            Object.keys(lacking).forEach(ingredient => {
-                if (!lacking[ingredient].notIn) {
-                    this.setState(prevState => {
-                        const list = prevState.errors
-                        list.push(<div key={ingredient}>You are lacking {lacking[ingredient].quantity} {dict[ingredient].measurement} of {ingredient}</div>)
-                        return ({ errors: list })
-                    })
-                }
-                else {
-                    this.setState(prevState => {
-                        const list = prevState.errors
-                        list.push(<div key={ingredient}>Your pantry does not have {ingredient}</div>)
-                        return ({ errors: list })
-                    })
-                }
-            })
+            else {
+                Object.keys(lacking).forEach(ingredient => {
+                    if (!lacking[ingredient].notIn) {
+                        this.setState(prevState => {
+                            const list = prevState.errors
+                            list.push(<div key={ingredient}>You are lacking {lacking[ingredient].quantity} {dict[ingredient].measurement} of {ingredient}</div>)
+                            return ({ errors: list })
+                        })
+                    }
+                    else {
+                        this.setState(prevState => {
+                            const list = prevState.errors
+                            list.push(<div key={ingredient}>Your pantry does not have {ingredient}</div>)
+                            return ({ errors: list })
+                        })
+                    }
+                })
+            }
         }
         else {
             if (newIngredients.length === recipeIngredients.length) {
                 this.setState({ cook: 1 })
-                this.setState({servings: this.props.data.servings})
+                this.setState({ servings: this.props.data.servings })
                 this.setState({ maxTimes: Math.min(...maxTimes) })
             }
             else {
@@ -157,8 +159,8 @@ class RecipeCook extends Component {
 
     render() {
         return (
-            <div style={{display: 'flex', flexDirection: 'column'}}>
-                <div style={{display: 'flex', justifyContent: 'center', paddingBottom: '1em'}}><h2>Enter the amount you would like to cook</h2></div>
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+                <div style={{ display: 'flex', justifyContent: 'center', paddingBottom: '1em' }}><h2>Enter the amount you would like to cook</h2></div>
                 <h3 style={{ display: 'flex', justifyContent: 'center' }}>Quantity: </h3>
                 <div style={{ display: 'flex', justifyContent: 'center' }}>
                     <button className="inventory-cancel-button" type="text" name="cook" value={this.state.cook} onClick={(event) => this.onChange(event, -1)}>-</button>
@@ -178,11 +180,11 @@ class RecipeCook extends Component {
                     <div>
                         <button className="recipe-cook-button" onClick={() => this.cooking(this.state.inventoryData, this.state.cook, true)}>COOK</button>
                     </div>
-                </div>    
-                <div style={{display: 'flex', alignItems: 'center', flexDirection: 'column'}}>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
                     {this.state.errors}
                 </div>
-                
+
             </div>
 
         )
