@@ -23,10 +23,15 @@ class RecipeCook extends Component {
         this.setState({ inventoryData: this.props.inventoryData }, this.cooking(this.props.inventoryData, 1, false))
     }
 
-    componentDidUpdate(prevProps) {
-        if (prevProps.inventoryData !== this.props.inventoryData) {
-            console.log("i was called")
-            this.setState({ inventoryData: this.props.inventoryData}, this.cooking(this.props.inventoryData, 1, false))
+    componentDidUpdate(_prevProps, prevState) {
+        if (prevState.maxTimes !== this.state.maxTimes && prevState.maxTimes) {
+            this.setState(
+                prevState => {
+                    return (
+                        prevState["cook"] = this.state.maxTimes,
+                        prevState["servings"] = parseFloat(this.state.maxTimes * this.props.data.servings)
+                    )
+                })
         }
     }
 
@@ -68,13 +73,13 @@ class RecipeCook extends Component {
     }
 
     cooking(ingredientData, multiplier, cooking) {
-        console.log("I was called")
         this.setState({ errors: [] })
-        const dict = ingredientData.reduce(function (dict, ingredient) {
+        let inventory = ingredientData.slice()
+        const dict = inventory.reduce(function (dict, ingredient) {
             (dict[ingredient.name] = ingredient)
             return dict
         }, {})
-        const recipeIngredients = this.props.data.ingredients
+        const recipeIngredients = this.props.data.ingredients.slice()
         let newIngredients = []
         let maxTimes = []
         let lacking = {}
@@ -104,6 +109,7 @@ class RecipeCook extends Component {
                 this.setState({ errors: [] })
                 // PATCH requests for new quantities of ingredients and update state
                 newIngredients.forEach(ingredient => {
+                    console.log(ingredient)
                     fetch('/item/' + ingredient.id, {
                         method: "PATCH",
                         headers: { 'Content-Type': 'application/json' },
@@ -122,7 +128,7 @@ class RecipeCook extends Component {
                         })
                 })
                 // make sure state is updated in this component as well
-                let inventoryData = this.state.inventoryData
+                let inventoryData = this.state.inventoryData.slice()
                 newIngredients.forEach(ingredient => {
                     for (let i = 0; i < inventoryData.length; i++) {
                         if (inventoryData[i].id === ingredient.id) {
@@ -130,6 +136,7 @@ class RecipeCook extends Component {
                         }
                     }
                 })
+                console.log(inventoryData, "inventoryData")
                 this.setState({ inventoryData: inventoryData }, this.props.updateInventory(this.state.inventoryData))
                 this.setState(prevState => {
                     return { maxTimes: prevState.maxTimes - multiplier }
@@ -152,7 +159,6 @@ class RecipeCook extends Component {
             }
         }
         else {
-            console.log(maxTimes)
             if (newIngredients.length === recipeIngredients.length) {
                 this.setState({ cook: 1 })
                 this.setState({ servings: this.props.data.servings })
@@ -192,7 +198,7 @@ class RecipeCook extends Component {
                         <button className="recipe-cook-button" onClick={() => this.cooking(this.state.inventoryData, this.state.cook, true)}>COOK</button>
                     </div>
                 </div>
-                <button onClick={()=> {this.props.updateIngredient([{name: 'pasta', quantity: 2}]); console.log(this.state.inventoryData)}}>TEST</button>
+                <button onClick={()=> {this.props.updateIngredient([{name: 'pasta', quantity: 2}]); console.log(this.state.inventoryData);}}>TEST</button>
                 <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
                     {this.state.errors}
                 </div>

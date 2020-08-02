@@ -36,7 +36,7 @@ class IngredientItem(Resource):
         measurement = request.json.get('measurement', '')
         url = request.json.get('url', '')
          
-        if quantity: 
+        if quantity or quantity == 0:
             ingredient.quantity = quantity
         if name:
             ingredient.name = name
@@ -46,6 +46,7 @@ class IngredientItem(Resource):
             ingredient.url = url    
         
         db.session.add(ingredient)
+        print(ingredient.quantity, ingredient.name)
         db.session.commit()
         return jsonify(ingredient_schema.dump(ingredient))
 
