@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import LackingContainer from './error_messages/lacking_container'
+import MissingContainer from './error_messages/missing_container'
 
 class RecipeCook extends Component {
 
@@ -19,6 +21,13 @@ class RecipeCook extends Component {
     // take ingredient data from somewhere
     componentDidMount() {
         this.setState({ inventoryData: this.props.inventoryData }, this.cooking(this.props.inventoryData, 1, false))
+    }
+
+    componentDidUpdate(prevProps) {
+        if (prevProps.inventoryData !== this.props.inventoryData) {
+            console.log("i was called")
+            this.setState({ inventoryData: this.props.inventoryData}, this.cooking(this.props.inventoryData, 1, false))
+        }
     }
 
     onChange(event, change) {
@@ -59,6 +68,7 @@ class RecipeCook extends Component {
     }
 
     cooking(ingredientData, multiplier, cooking) {
+        console.log("I was called")
         this.setState({ errors: [] })
         const dict = ingredientData.reduce(function (dict, ingredient) {
             (dict[ingredient.name] = ingredient)
@@ -127,25 +137,22 @@ class RecipeCook extends Component {
             }
             // if not enough ingredients, give option for user to add the lacking ingredients
             else {
+                let lackingQuantity = {}
+                let lackingIngredient = {}
                 Object.keys(lacking).forEach(ingredient => {
                     if (!lacking[ingredient].notIn) {
-                        this.setState(prevState => {
-                            const list = prevState.errors
-                            list.push(<div key={ingredient}>You are lacking {lacking[ingredient].quantity} {dict[ingredient].measurement} of {ingredient}</div>)
-                            return ({ errors: list })
-                        })
+                        lackingQuantity[ingredient] = lacking[ingredient]
                     }
                     else {
-                        this.setState(prevState => {
-                            const list = prevState.errors
-                            list.push(<div key={ingredient}>Your pantry does not have {ingredient}</div>)
-                            return ({ errors: list })
-                        })
+                        lackingIngredient[ingredient] = lacking[ingredient]
                     }
                 })
+                this.setState({errors: [<LackingContainer key='quantity' data={lackingQuantity}></LackingContainer>,
+                                        <MissingContainer key='missing' data={lackingIngredient}/>]})
             }
         }
         else {
+            console.log(maxTimes)
             if (newIngredients.length === recipeIngredients.length) {
                 this.setState({ cook: 1 })
                 this.setState({ servings: this.props.data.servings })
@@ -166,7 +173,9 @@ class RecipeCook extends Component {
                     <button className="inventory-cancel-button" type="text" name="cook" value={this.state.cook} onClick={(event) => this.onChange(event, -1)}>-</button>
                     <input type="text" name="cook" value={this.state.cook} onChange={(event) => this.onChange(event)} />
                     <button className="recipe-cook-button" type="text" name="cook" value={this.state.cook} onClick={(event) => this.onChange(event, 1)}>+</button>
-                    <button className="recipe-cook-button" type="text" name="cook" value={this.state.cook} onClick={(event) => this.onChange(event, parseInt(this.state.maxTimes - this.state.cook))}>MAX</button>
+                    <button className="recipe-cook-button" type="text" name="cook" value={this.state.cook} onClick={(event) => {
+                        this.cooking(this.state.inventoryData, 1, false);
+                        this.onChange(event, parseInt(this.state.maxTimes - this.state.cook))}}>MAX</button>
                     <div>
                         <button className="recipe-cook-button" onClick={() => this.cooking(this.state.inventoryData, this.state.cook, true)}>COOK</button>
                     </div>
@@ -176,11 +185,14 @@ class RecipeCook extends Component {
                     <button className="inventory-cancel-button" type="text" name="servings" value={this.state.servings} onClick={(event) => this.onChange(event, -1)}>-</button>
                     <input type="text" name="cook" value={this.state.servings} onChange={(event) => this.onChange(event)} />
                     <button className="recipe-cook-button" type="text" name="servings" value={this.state.servings} onClick={(event) => this.onChange(event, 1)}>+</button>
-                    <button className="recipe-cook-button" type="text" name="servings" value={this.state.servings} onClick={(event) => this.onChange(event, parseInt(this.state.maxTimes * this.props.data.servings - this.state.servings))}>MAX</button>
+                    <button className="recipe-cook-button" type="text" name="servings" value={this.state.servings} onClick={(event) => {
+                        this.cooking(this.state.inventoryData, 1, false);
+                        this.onChange(event, parseInt(this.state.maxTimes * this.props.data.servings - this.state.servings))}}>MAX</button>
                     <div>
                         <button className="recipe-cook-button" onClick={() => this.cooking(this.state.inventoryData, this.state.cook, true)}>COOK</button>
                     </div>
                 </div>
+                <button onClick={()=> {this.props.updateIngredient([{name: 'pasta', quantity: 2}]); console.log(this.state.inventoryData)}}>TEST</button>
                 <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
                     {this.state.errors}
                 </div>

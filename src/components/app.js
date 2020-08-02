@@ -11,7 +11,8 @@ class App extends Component {
       super()
       this.state = {recipeData: [],
                     inventoryData: []}
-      this.updateInventory = this.updateInventory.bind(this)              
+      this.updateInventory = this.updateInventory.bind(this)
+      this.updateIngredient = this.updateIngredient.bind(this)              
     }
 
     componentDidMount() {
@@ -22,15 +23,30 @@ class App extends Component {
         })
     }
 
-    updateInventory(data){
+    updateInventory(data) {
         this.setState({inventoryData: data}, console.log(this.state.inventoryData))
+    }
+
+    updateIngredient(data) {
+      this.setState(prevState => {
+        let inventory = prevState.inventoryData
+        data.forEach(
+          ingredient => {
+              for (let i = 0; i < inventory.length;i++) {
+                if(inventory[i].name === ingredient.name) {
+                  inventory[i].quantity = parseFloat(inventory[i].quantity) + parseFloat(ingredient.quantity)  
+                }
+              }  
+          })
+        return {inventoryData : inventory}
+      }, console.log(this.state.inventoryData))
     }
 
     render() {
         const recipeLinks = this.state.recipeData.map(item => {
           let recipeData = item
           return(<Route exact path={'/recipes/'+ item.name}  key={item.name} render={(props) => <RecipeView {...props} data={recipeData} inventoryData={this.state.inventoryData}
-          updateInventory={this.updateInventory}/>} />)
+          updateInventory={this.updateInventory} updateIngredient={this.updateIngredient}/>} />)
         })
         return(
         <HashRouter>

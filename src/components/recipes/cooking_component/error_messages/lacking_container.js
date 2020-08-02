@@ -1,16 +1,15 @@
 import React from 'react'
 import IngredientLacking from './ingredient_lacking'
-
-const lacking = {'test': {quantity: 10, measurment: 'pcs'}, 'test1': {quantity: 10, measurment: 'pcs'}, 'test2': {quantity: 10, measurment: 'pcs'}}        
-
-function LackingContainer() {
-    const names = Object.keys(lacking)
+      
+function LackingContainer(props) {
+    const names = Object.keys(props.data)
     let lackings = []
     names.forEach((ingredient) => {
-        lackings.push(<IngredientLacking ingredient={{[ingredient]: {quantity: 10, measurment: 'pcs'}}}/>)
+        lackings.push(<IngredientLacking key={ingredient} ingredient={{[ingredient]: props.data[ingredient]}}/>)
     })
     return(
         <div>
+            {lackings.length !== 0? <h3>You do not have enough of these ingredients: </h3>: null}
         {lackings}
         </div>
     )  
