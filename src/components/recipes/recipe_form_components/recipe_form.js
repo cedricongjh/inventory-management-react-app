@@ -58,7 +58,7 @@ function RecipeForm(props) {
                             const { categories } = values
                             return (
                                 <div>
-                                    {categories.map((category, index) => {
+                                    {categories.map((_category, index) => {
                                         return (
                                             <div key={index} style={{ display: 'flex', flexDirection: 'row' }}>
                                                 <Field name={`categories[${index}]`}></Field>
@@ -113,7 +113,7 @@ function RecipeForm(props) {
                             return (
                                 <div>
                                     {ingredients.map(
-                                        (ingredient, index) => {
+                                        (_ingredient, index) => {
                                             return (
                                                 <div key={index} style={{ display: 'flex', flexDirection: "row" }}>
                                                     <Field name={`ingredients[${index}].name`} placeholder="name" />

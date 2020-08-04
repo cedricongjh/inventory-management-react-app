@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import IngredientDisplay from './ingredient_display/ingredient_display'
 import IngredientLacking from './error_messages/ingredient_lacking'
 import IngredientMissing from './error_messages/ingredient_missing'
+import IngredientIgnored from './ingredient_display/ingredient_ignored'
 
 class RecipeCook extends Component {
 
@@ -94,7 +95,24 @@ class RecipeCook extends Component {
         let ingredientDisplay = []
         recipeIngredients.forEach(
             ingredient => {
-                if (ingredient.name in dict) {
+                if (ingredient.ignore) {
+                    if (ingredient.name in dict) {
+                    newIngredients.push({ ...ingredient })
+                    newIngredients[newIngredients.length - 1].quantity = dict[ingredient.name].quantity
+                    newIngredients[newIngredients.length - 1].id = dict[ingredient.name].id}
+                    else {
+                        newIngredients.push("dummy")
+                    }
+                    maxTimes.push(Math.pow(10, 1000))
+                    ingredientDisplay.push(<IngredientIgnored 
+                                            key={ingredient.name}
+                                            recipeData={ingredient}
+                                            InventoryData={ingredient}
+                                            runCooking={this.runCooking}
+                                            ignoreIngredient={this.props.ignoreIngredient}
+                                            id={this.props.data.id} />)
+                }
+                else if (ingredient.name in dict) {
                     if (dict[ingredient.name].quantity >= ingredient.quantity * multiplier) {
                         var newQuantity = dict[ingredient.name].quantity - ingredient.quantity * multiplier
                         newIngredients.push({ ...ingredient })
@@ -105,27 +123,36 @@ class RecipeCook extends Component {
                             key={ingredient.name}
                             multiplier={multiplier}
                             InventoryData={dict[ingredient.name]}
-                            recipeData={ingredient} 
+                            recipeData={ingredient}
                             updateIngredient={this.props.updateIngredient}
-                            runCooking={this.runCooking}/>)
+                            runCooking={this.runCooking} 
+                            ignoreIngredient={this.props.ignoreIngredient}
+                            id={this.props.data.id}/>)
                     }
                     else {
-                        lacking[ingredient.name] = { quantity: (ingredient.quantity * multiplier - dict[ingredient.name].quantity), notIn: false, measurement: ingredient.measurement }
-                        ingredientDisplay.push(<IngredientLacking 
-                            key={ingredient.name} 
+                        lacking[ingredient.name] = { quantity: (ingredient.quantity * multiplier - dict[ingredient.name].quantity), notIn: false, measurement: ingredient.measurement, ignore: ingredient.ignore }
+                        ingredientDisplay.push(<IngredientLacking
+                            key={ingredient.name}
                             ingredient={{ [ingredient.name]: lacking[ingredient.name] }}
-                            updateIngredient={this.props.updateIngredient} 
-                            runCooking={this.runCooking}/>)
+                            updateIngredient={this.props.updateIngredient}
+                            runCooking={this.runCooking}
+                            ignoreIngredient={this.props.ignoreIngredient}
+                            id={this.props.data.id} />)
                     }
                 }
                 else {
                     lacking[ingredient.name] = { notIn: true, quantity: ingredient.quantity, measurement: ingredient.measurement }
-                    ingredientDisplay.push(<IngredientMissing 
-                        key={ingredient.name} 
-                        ingredient={{ [ingredient.name]: lacking[ingredient.name] }} />)
+                    ingredientDisplay.push(<IngredientMissing
+                        key={ingredient.name}
+                        ingredient={{ [ingredient.name]: lacking[ingredient.name] }}
+                        updateIngredient={this.props.updateIngredient}
+                        runCooking={this.runCooking}
+                        ignoreIngredient={this.props.ignoreIngredient}
+                        id={this.props.data.id} />)
                 }
             }
         )
+
         this.setState({ ingredientDisplay: ingredientDisplay })
         if (cooking) {
             if (newIngredients.length === recipeIngredients.length) {
@@ -168,7 +195,11 @@ class RecipeCook extends Component {
             if (newIngredients.length === recipeIngredients.length) {
                 this.setState({ cook: 1 })
                 this.setState({ servings: this.props.data.servings })
-                this.setState({ maxTimes: Math.min(...maxTimes) })
+                if (Math.min(...maxTimes) !== Infinity) {
+                this.setState({ maxTimes: Math.min(...maxTimes) }) }
+                else {
+                    this.setState({ maxTimes : 1 })
+                }
             }
             else {
                 this.setState({ cook: 0, maxTimes: 0, servings: 0 })
@@ -177,6 +208,7 @@ class RecipeCook extends Component {
     }
 
     render() {
+
         return (
             <div style={{ display: 'flex', flexDirection: 'column' }}>
                 <div style={{ display: 'flex', justifyContent: 'center', paddingBottom: '1em' }}><h2>Enter the amount you would like to cook</h2></div>
@@ -190,7 +222,7 @@ class RecipeCook extends Component {
                         this.onChange(event, parseInt(this.state.maxTimes - this.state.cook))
                     }}>MAX</button>
                     <div>
-                        <button className="recipe-cook-button" onClick={() => {console.log(this.props.inventoryData, "pls"); this.cooking(this.props.inventoryData.slice(), this.state.cook, true)}}>COOK</button>
+                        <button className="recipe-cook-button" onClick={() => {this.cooking(this.props.inventoryData.slice(), this.state.cook, true) }}>COOK</button>
                     </div>
                 </div>
                 <h3 style={{ display: 'flex', justifyContent: 'center' }}>Servings: </h3>
@@ -209,7 +241,6 @@ class RecipeCook extends Component {
                 <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
                     {this.state.ingredientDisplay ? <div><h3>Inventory: </h3></div> : null}
                     {this.state.ingredientDisplay}
-                    {this.state.errors}
                 </div>
 
             </div>

@@ -58,7 +58,7 @@ class RecipeView extends Component {
     {this.state.formPopup? <PopUpForm handleClick={this.handleClick}/> : null}
     {this.state.editPopup? <PopUpEdit handleClick={this.handleClick} data={this.props.data}/> : null}
     {this.state.cookPopup? <PopUpCook handleClick={this.handleClick} data={this.props.data} inventoryData={this.props.inventoryData} updateInventory={this.props.updateInventory}
-                            updateIngredient={this.props.updateIngredient}/> : null}
+                            updateIngredient={this.props.updateIngredient} ignoreIngredient={this.props.ignoreIngredient}/> : null}
     </div>)}
 }
 

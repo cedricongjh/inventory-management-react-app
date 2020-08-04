@@ -11,7 +11,8 @@ class App extends Component {
       this.state = {recipeData: [],
                     inventoryData: []}
       this.updateInventory = this.updateInventory.bind(this)
-      this.updateIngredient = this.updateIngredient.bind(this)              
+      this.updateIngredient = this.updateIngredient.bind(this)
+      this.ignoreIngredient = this.ignoreIngredient.bind(this)              
     }
 
     componentDidMount() {
@@ -20,6 +21,20 @@ class App extends Component {
         fetch('/inventory').then(response => response.json()).then(result => {
           this.setState({inventoryData: result})
         })
+    }
+
+    ignoreIngredient(data, recipeId) {
+      this.setState(prevState => {
+        let prevRecipeData = [...prevState.recipeData[recipeId - 1].ingredients]
+        for (let i = 0; i < prevRecipeData.length; i ++) {
+          if (prevRecipeData[i].name === data.name) {
+            prevRecipeData[i].ignore = !prevRecipeData[i].ignore
+          }
+        }
+        return (
+          prevState.recipeData[recipeId -1].ingredients = prevRecipeData
+        )
+      })         
     }
 
     updateInventory(data) {
@@ -45,7 +60,7 @@ class App extends Component {
         const recipeLinks = this.state.recipeData.map(item => {
           let recipeData = item
           return(<Route exact path={'/recipes/'+ item.name}  key={item.name} render={(props) => <RecipeView {...props} data={recipeData} inventoryData={this.state.inventoryData}
-          updateInventory={this.updateInventory} updateIngredient={this.updateIngredient}/>} />)
+          updateInventory={this.updateInventory} updateIngredient={this.updateIngredient} ignoreIngredient={this.ignoreIngredient}/>} />)
         })
         return(
         <HashRouter>

@@ -5,22 +5,28 @@ const items = [
                 categories: ['breakfast', 'vegan'],
                 ingredients: [{name: 'rolled oats',
                                quantity: 0.75,
-                               measurement: 'cup'
+                               measurement: 'cup',
+                               ignore: false
                               },
                               {name: 'cocoa powder',
                                quantity: 1,
-                               measurement: 'cup'
+                               measurement: 'cup',
+                               ignore: false
                               }, 
                               {name: 'banana',
                               quantity: 1,
-                              measurement: 'pcs'
+                              measurement: 'pcs',
+                              ignore: false
                               },
                               {name: 'strawberry',
                               quantity: 1,
-                              measurement: 'cup'},
+                              measurement: 'cup',
+                              ignore: false
+                              },
                               {name: 'peanut butter',
                               quantity: 1,
-                              measurement: 'serving'}
+                              measurement: 'serving',
+                              ignore: false}
                              ],
                 time: {hours: 0, minutes: 10},
                 servings: 1,             
@@ -36,25 +42,34 @@ const items = [
                     categories: ['lunch', 'dinner', 'vegan', 'breakfast'],
                     ingredients: [{name: 'macadamias',
                                    quantity: 0.5,
-                                   measurement: 'cup'
+                                   measurement: 'cup',
+                                   ignore: false
                                   },
                                   {name: 'carrot',
                                    quantity: 1,
-                                   measurement: 'pcs'
+                                   measurement: 'pcs',
+                                   ignore: false
                                   }, 
                                   {name: 'nutritional yeast',
                                   quantity: 0.25,
-                                  measurement: 'cup'
+                                  measurement: 'cup',
+                                  ignore: false
                                   },
                                   {name: 'white vinegar',
                                   quantity: 1,
-                                  measurement: 'tsp'},
+                                  measurement: 'tsp',
+                                  ignore: false
+                                  },
                                   {name: 'ground nutmeg',
                                   quantity: 0.125,
-                                  measurement: 'tsp'},
+                                  measurement: 'tsp',
+                                  ignore: false
+                                  },
                                   {name: 'pasta',
                                   quantity: 3,
-                                  measurement: 'serving'},  
+                                  measurement: 'serving',
+                                  ignore: false
+                                  },  
                                  ],
                     time: {hours: 0, minutes: 20},
                     servings: 2,             
