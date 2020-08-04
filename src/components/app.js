@@ -28,7 +28,7 @@ class App extends Component {
 
     updateIngredient(data) {
       this.setState(prevState => {
-        let inventory = prevState.inventoryData
+        let inventory = [...prevState.inventoryData]
         data.forEach(
           ingredient => {
               for (let i = 0; i < inventory.length;i++) {
