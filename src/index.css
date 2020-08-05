@@ -140,26 +140,22 @@ body {
 
 .recipe-page-image {
   padding-top: 1em;
-  margin-left: 25%;
-  margin-right: 47%;
   max-width: 100%;
   height: auto;
   width: auto;
 }
 
 .sidenav {
-  width: 130px;
-  position: fixed;
+  width: 7rem;
+  height: 7rem;
   z-index: 1;
-  top: 17em;
-  right: 45em;
-  background: #eee;
   overflow-x: hidden;
   padding: 8px 8px;
-  float: right;
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
+  padding-left: 6%;
+  padding-top: 1em;
 }
 
 .recipe-cook-button {
@@ -187,16 +183,12 @@ body {
 }
 
 .recipe-page-description {
-  margin-left: 25%;
-  margin-right: 47%;
   padding-top: 1em;
   font-size: 16px;
   font-family: 'Roboto Slab', serif;
 }
 
 .ingredients-container{
-  margin-left: 25%;
-  margin-right: 47%;
   font-size: 16px;
   font-family: 'Roboto Slab', serif;
 }
@@ -238,3 +230,18 @@ body {
   border: 1px solid #888;
   width: 80%; 
 }
+
+.rounded-input {
+  padding:10px;
+  border-radius:10px;
+}
+
+input, textarea {
+  font-family:inherit;
+  font-size: 14px;
+}
+
+.recipe-text-wrapper {
+  display: inline-block;
+}
+

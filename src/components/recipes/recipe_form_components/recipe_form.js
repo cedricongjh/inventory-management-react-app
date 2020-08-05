@@ -14,7 +14,8 @@ function RecipeForm(props) {
         ingredients: [{
             name: '',
             quantity: '',
-            measurement: ''
+            measurement: '',
+            ignore: false
         }],
         instructions: ['']
     }
@@ -34,7 +35,8 @@ function RecipeForm(props) {
         ingredients: yup.array().of(yup.object().shape({
             name: yup.string().required('Required'),
             quantity: yup.number().required('Required').typeError('Please input numerial values'),
-            measurement: yup.string().required('Required')
+            measurement: yup.string().required('Required'),
+            ignore: yup.boolean()
         })).min(1, 'requires at least one ingredient'),
         instructions: yup.array().of(yup.string())
     })
@@ -45,7 +47,7 @@ function RecipeForm(props) {
 
                 <div style={{ display: 'flex', flexDirection: "column" }}>
                     <label htmlFor="name">Name</label>
-                    <Field name="name" />
+                    <Field className="rounded-input" name="name" />
                     <ErrorMessage name="name" />
                 </div>
 
@@ -61,7 +63,7 @@ function RecipeForm(props) {
                                     {categories.map((_category, index) => {
                                         return (
                                             <div key={index} style={{ display: 'flex', flexDirection: 'row' }}>
-                                                <Field name={`categories[${index}]`}></Field>
+                                                <Field className="rounded-input" name={`categories[${index}]`}></Field>
                                                 <ErrorMessage name={`categories[${index}]`} />
                                                 {index > 0 ? <button type="button" onClick={() => remove(index)}>-</button> : null}
                                                 <button type="button" onClick={() => push('')}>+</button>
@@ -87,19 +89,19 @@ function RecipeForm(props) {
                 <div>Time required: </div>
                 <div style={{ display: 'flex', flexDirection: "column" }}>
                     <label htmlFor="time.hours">Hours</label>
-                    <Field name="time.hours" />
+                    <Field className="rounded-input" name="time.hours" />
                     <ErrorMessage name="time.hours" />
                 </div>
 
                 <div style={{ display: 'flex', flexDirection: "column" }}>
                     <label htmlFor="time.minutes">Minutes</label>
-                    <Field name="time.minutes" />
+                    <Field className="rounded-input" name="time.minutes" />
                     <ErrorMessage name="time.minutes" />
                 </div>
 
                 <div style={{ display: 'flex', flexDirection: "column" }}>
                     <label htmlFor="servings">Servings</label>
-                    <Field name="servings" />
+                    <Field className="rounded-input" name="servings" />
                     <ErrorMessage name="servings" />
                 </div>
 
@@ -116,14 +118,21 @@ function RecipeForm(props) {
                                         (_ingredient, index) => {
                                             return (
                                                 <div key={index} style={{ display: 'flex', flexDirection: "row" }}>
-                                                    <Field name={`ingredients[${index}].name`} placeholder="name" />
+                                                    <div style={{ display: 'flex', flexDirection: "column" }}>
+                                                    <Field className="rounded-input" name={`ingredients[${index}].name`} placeholder="name" />
                                                     <ErrorMessage name={`ingredients[${index}].name`} />
-                                                    <Field name={`ingredients[${index}].quantity`} placeholder="quantity" />
+                                                    </div>
+                                                    <div style={{ display: 'flex', flexDirection: "column" }}>
+                                                    <Field className="rounded-input" name={`ingredients[${index}].quantity`} placeholder="quantity" />
                                                     <ErrorMessage name={`ingredients[${index}].quantity`} />
-                                                    <Field name={`ingredients[${index}].measurement`} placeholder="measurement" />
+                                                    </div>
+                                                    <div style={{ display: 'flex', flexDirection: "column" }}>
+                                                    <Field className="rounded-input" name={`ingredients[${index}].measurement`} placeholder="measurement" />
                                                     <ErrorMessage name={`ingredients[${index}].measurement`} />
+                                                    </div>
+                                                    <Field name={`ingredients[${index}].ignore`} type="checkbox" />
                                                     {index > 0 ? <button type="button" onClick={() => remove(index)}>-</button> : null}
-                                                    <button type="button" onClick={() => push({ name: '', quantity: '', measurement: '' })}>+</button>
+                                                    <button type="button" onClick={() => push({ name: '', quantity: '', measurement: '', ignore: false })}>+</button>            
                                                 </div>
                                             )
                                         }
