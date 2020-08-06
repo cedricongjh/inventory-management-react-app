@@ -46,7 +46,6 @@ class IngredientItem(Resource):
             ingredient.url = url    
         
         db.session.add(ingredient)
-        print(ingredient.quantity, ingredient.name)
         db.session.commit()
         return jsonify(ingredient_schema.dump(ingredient))
 
