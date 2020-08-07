@@ -27,13 +27,6 @@ class Ingredient(db.Model):
     url = db.Column(db.String(200))
     inventory_id = db.Column(db.Integer, db.ForeignKey('inventory.id'))
 
-    def __init__(self, name, quantity, measurement, url, inventory_id):
-        self.name = name
-        self.quantity = quantity
-        self.measurement = measurement
-        self.url = url
-        self.inventory_id = inventory_id
-
 
 class Recipe(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -44,7 +37,7 @@ class Recipe(db.Model):
     time = db.relationship('RecipeTime', backref = 'recipe', uselist=False)
     servings = db.Column(db.Integer)
     description = db.Column(db.String(1000))
-    instructions = db.Column(db.Integer)
+    instructions = db.Column(db.String(2000))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 
@@ -59,6 +52,7 @@ class Recipeingredient(db.Model):
     name = db.Column(db.String(50), nullable=False)
     quantity = db.Column(db.Float, nullable=False)
     measurement = db.Column(db.String(50), nullable=False)
+    ignore = db.Column(db.Boolean, default=False)
     recipe_id = db.Column(db.Integer, db.ForeignKey('recipe.id'), nullable=False)
 
 
@@ -71,4 +65,25 @@ class RecipeTime(db.Model):
 
 class IngredientSchema(SQLAlchemyAutoSchema):
     class Meta:
-        model = Ingredient     
+        model = Ingredient
+
+
+class RecipeSchema(SQLAlchemyAutoSchema):
+    class Meta:
+        model = Recipe
+        include_relationships = True
+
+
+class RecipecategorySchema(SQLAlchemyAutoSchema):
+    class Meta:
+        model = Recipecategory
+
+
+class RecipeIngredientSchema(SQLAlchemyAutoSchema):
+    class Meta:
+        model = Recipeingredient
+
+
+class RecipeTimeSchema(SQLAlchemyAutoSchema):
+    class Meta:
+        model = RecipeTime

@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 from flask_restful import Resource, abort 
-from models import Ingredient, IngredientSchema
+from models import Ingredient, IngredientSchema, Recipe, RecipeSchema, Recipeingredient, RecipeIngredientSchema, Recipecategory, RecipecategorySchema
 from app import db, ma , api
 
 main = Blueprint('main', __name__)
@@ -70,7 +70,34 @@ class IngredientList(Resource):
         db.session.commit()
 
         return jsonify(ingredient_schema.dump(ingredient))
-        
+
+
+class RecipeList(Resource):
+
+    def get(self):
+        all_recipes = Recipe.query.all()
+        recipe_schema = RecipeSchema(many=True)
+        recipe = complete_recipe(recipe_schema.dump(all_recipes))
+        return jsonify(recipe)
+
+
+def complete_recipe(recipe_array):
+    for recipe in recipe_array:
+        recipe['ingredients'] = get_items(recipe['ingredients'], Recipeingredient, RecipeIngredientSchema())
+        recipe['categories'] = get_items(recipe['categories'], Recipecategory, RecipecategorySchema())
+        recipe['instructions'] = recipe['instructions'].split('/')   
+    return recipe_array    
+
+
+def get_items(array, model, schema):
+    new_array = []
+    for id in array:
+        model_ = model.query.get(id)
+        schema_ = schema
+        new_array.append(schema_.dump(model_))
+    return new_array    
+
 
 api.add_resource(IngredientList, '/inventory') 
 api.add_resource(IngredientItem, '/item/<item_id>')
+api.add_resource(RecipeList, '/recipes')
