@@ -44,6 +44,7 @@ class Recipe(db.Model):
 class Recipecategory(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50))
+    array_index = db.Column(db.Integer, nullable=False)
     recipe_id = db.Column(db.Integer, db.ForeignKey('recipe.id'), nullable=False)
 
 
