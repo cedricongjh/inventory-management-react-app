@@ -8,7 +8,7 @@ main = Blueprint('main', __name__)
 
 def abort_if_not_exist(ingredient):
     if not ingredient:
-        abort(404, message = "ingredient does not exist")
+        abort(404, message = "item does not exist")
     
 
 class IngredientItem(Resource):
@@ -72,13 +72,178 @@ class IngredientList(Resource):
         return jsonify(ingredient_schema.dump(ingredient))
 
 
+class RecipeItem(Resource):
+    
+    def get(self, recipe_id):
+
+        recipe_schema = RecipeSchema(many=True)
+        recipe = Recipe.query.filter_by(id=recipe_id).first()
+        abort_if_not_exist(recipe)
+        recipe = complete_recipe(recipe_schema.dump([recipe]))
+        
+        return jsonify(recipe[0])
+
+    def delete(self, recipe_id):
+        
+        recipe_schema = RecipeSchema(many=True)
+        recipe = Recipe.query.filter_by(id=recipe_id).first()
+        abort_if_not_exist(recipe)
+
+        return_value = complete_recipe(recipe_schema.dump([recipe]))
+
+        ingredients = Recipeingredient.query.filter_by(recipe_id=recipe_id).all()
+        categories = Recipecategory.query.filter_by(recipe_id=recipe_id).all()
+        time = RecipeTime.query.filter_by(recipe_id=recipe_id).all()
+
+        delete_array(ingredients)
+        delete_array(categories)
+        delete_array(time)
+
+        db.session.delete(recipe)
+        db.session.commit()
+        
+        return jsonify(return_value[0])
+
+
+    def patch(self, recipe_id):
+
+        recipe_schema = RecipeSchema(many=True)
+        recipe = Recipe.query.filter_by(id=recipe_id).first()
+        abort_if_not_exist(recipe)
+
+        name = request.json.get('name', '')
+        url =  request.json.get('url', '')
+        categories = request.json.get('categories', '')
+        ingredients = request.json.get('ingredients', '')
+        time = request.json.get('time', '')
+        servings = request.json.get('servings', '')
+        description = request.json.get('description', '')
+        instructions = request.json.get('instructions', '')
+
+        if name:
+            recipe.name = name
+        if url:
+            recipe.url = url
+        if servings:
+            recipe.servings = servings
+        if description:
+            recipe.description = description
+        if instructions:
+            recipe.instructions = '/'.join(instructions)
+        
+        # edit this to handle different array sizes, similar to that of categories below
+        if ingredients:
+            prev_ingredients = recipe.ingredients
+            prev_ids = [prev_ingredient.id for prev_ingredient in prev_ingredients]
+
+            new_length = len(ingredients)
+
+            if new_length > len(prev_ids):
+                i = 0
+                for prev_ingredient in prev_ingredients:
+                    prev_ingredient.name = ingredients[i]['name']
+                    prev_ingredient.quantity = ingredients[i]['quantity']
+                    prev_ingredient.measurement = ingredients[i]['measurement']
+                    prev_ingredient.ignore = ingredients[i]['ignore']
+                    prev_ingredient.recipe_id = recipe_id
+                    i += 1
+                    db.session.add(prev_ingredient)
+
+                for ingredient in ingredients[i:]:
+                    ingredient = Recipeingredient(recipe_id = recipe_id, name = ingredient['name'], 
+                    measurement = ingredient['measurement'], ignore = ingredient['ignore'], quantity = ingredient['quantity'])
+                    db.session.add(ingredient)
+
+            elif new_length < len(prev_ids):
+                i = 0  
+                while i < new_length:
+                    prev_ingredients[i].name = ingredients[i]['name']
+                    prev_ingredients[i].quantity = ingredients[i]['quantity']
+                    prev_ingredients[i].measurement = ingredients[i]['measurement']
+                    prev_ingredients[i].ignore = ingredients[i]['ignore']
+                    prev_ingredients[i].recipe_id = recipe_id
+                    i += 1
+                    db.session.add(prev_ingredients[i])
+
+                delete_array(prev_ingredients[i:])
+
+            else:
+                i = 0
+                for prev_ingredient in prev_ingredients:
+                    prev_ingredient.name = ingredients[i]['name']
+                    prev_ingredient.quantity = ingredients[i]['quantity']
+                    prev_ingredient.measurement = ingredients[i]['measurement']
+                    prev_ingredient.ignore = ingredients[i]['ignore']
+                    prev_ingredient.recipe_id = recipe_id
+                    i += 1
+                    db.session.add(prev_ingredient)
+
+
+        if categories:
+            prev_catergories = recipe.categories
+            array_index = 0
+            prev_ids = [prev_catergory.id for prev_catergory in prev_catergories]
+            
+            new_length = len(categories)
+            
+            if new_length > len(prev_ids):
+                i = 0
+                for prev_catergory in prev_catergories:
+                    prev_catergory.name = categories[i]
+                    prev_catergory.array_index = array_index
+                    i += 1
+                    array_index += 1
+                    db.session.add(prev_catergory)
+                
+                for category in categories[i:]:
+                    category = Recipecategory(recipe_id=recipe_id, name=category, array_index=array_index)
+                    array_index += 1
+                    db.session.add(category)
+
+            elif new_length < len(prev_ids):
+                i = 0
+                while i < new_length:
+                    prev_catergories[i].name = categories[i]
+                    prev_catergories[i].array_index = array_index
+                    i += 1
+                    array_index += 1
+                    db.session.add(prev_catergories[i])
+                
+                delete_array(prev_catergories[i:])
+
+
+            else:
+                i = 0
+                for prev_catergory in prev_catergories:
+
+                    prev_catergory.name = categories[i]
+                    prev_catergory.array_index = array_index
+                    i += 1
+                    array_index += 1
+                    db.session.add(prev_catergory)    
+
+        if time:
+           prev_time = RecipeTime.query.filter_by(recipe_id=recipe_id).first()
+           prev_time.hour = time['hour']
+           prev_time.minute = time['minute']
+
+           db.session.add(prev_time)
+
+
+        db.session.commit()
+        recipe = complete_recipe(recipe_schema.dump([recipe]))
+        
+        return jsonify(recipe[0])   
+
+
+
+
 class RecipeList(Resource):
 
     def get(self):
         all_recipes = Recipe.query.all()
         recipe_schema = RecipeSchema(many=True)
         recipe = complete_recipe(recipe_schema.dump(all_recipes))
-        print(recipe[0] == recipe[1])
         return jsonify(recipe)
 
 
@@ -113,8 +278,7 @@ class RecipeList(Resource):
         
         added_recipe = Recipe.query.get(id)
         recipe_schema = RecipeSchema(many=True)
-        added_recipe = [added_recipe]
-        recipe = complete_recipe(recipe_schema.dump(added_recipe))
+        recipe = complete_recipe(recipe_schema.dump([added_recipe]))
         return jsonify(recipe[0])    
 
 def complete_recipe(recipe_array):
@@ -152,6 +316,13 @@ def key_to_object(key, model, schema):
     return schema_.dump(model_)
 
 
+# deletes an array of objects from database
+def delete_array(array):
+    for item in array:
+        db.session.delete(item)
+    
+
 api.add_resource(IngredientList, '/inventory') 
 api.add_resource(IngredientItem, '/item/<item_id>')
 api.add_resource(RecipeList, '/recipes')
+api.add_resource(RecipeItem, '/recipe/<recipe_id>')
