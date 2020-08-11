@@ -19,9 +19,26 @@ function RecipeForm(props) {
         }],
         instructions: ['']
     }
-    console.log(initialValues)
     const onSubmit = (values) => {
         console.log(values)
+        if (props.type === 'editPopup') {
+            fetch('recipe/' + props.data.id, {
+                method: "PATCH",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(values)
+            }).then(response => {
+                if (response.ok) {
+                    props.updateRecipe(values)
+                    props.handleClick(props.type)
+                    return response.json()
+                }
+            }).then(data => {
+                console.log('success', data)
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            })  
+        }
     }
     const validationSchema = yup.object().shape({
         name: yup.string().required('A name is required'),

@@ -224,8 +224,8 @@ class RecipeItem(Resource):
 
         if time:
            prev_time = RecipeTime.query.filter_by(recipe_id=recipe_id).first()
-           prev_time.hour = time['hour']
-           prev_time.minute = time['minute']
+           prev_time.hour = time['hours']
+           prev_time.minute = time['minutes']
 
            db.session.add(prev_time)
 

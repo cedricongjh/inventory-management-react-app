@@ -8,7 +8,7 @@ function PopUpForm(props) {
             <span className="close" onClick={() => props.handleClick('formPopup')}>
             X
             </span>
-                <RecipeForm />
+                <RecipeForm updateRecipe={props.updateRecipe}  handleClick={props.handleClick} type='formPopup'/>
             </div>
         </div>
     )
