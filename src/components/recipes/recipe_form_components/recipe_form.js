@@ -38,6 +38,8 @@ function RecipeForm(props) {
             .catch((error) => {
                 console.error('Error:', error);
             })  
+        } else if (props.type === 'formPopup') {
+            
         }
     }
     const validationSchema = yup.object().shape({
@@ -134,7 +136,7 @@ function RecipeForm(props) {
                                     {ingredients.map(
                                         (_ingredient, index) => {
                                             return (
-                                                <div key={index} style={{ display: 'flex', flexDirection: "row" }}>
+                                                <div key={index} style={{ display: 'flex', flexDirection: "row", flexWrap: "wrap", marginBottom: '1em'}}>
                                                     <div style={{ display: 'flex', flexDirection: "column" }}>
                                                     <Field className="rounded-input" name={`ingredients[${index}].name`} placeholder="name" />
                                                     <ErrorMessage name={`ingredients[${index}].name`} />

@@ -26,6 +26,7 @@ class Ingredient(db.Model):
     measurement = db.Column(db.String(50), nullable=False)
     url = db.Column(db.String(200))
     inventory_id = db.Column(db.Integer, db.ForeignKey('inventory.id'))
+    array_id = db.Column(db.Integer, nullable=False)
 
 
 class Recipe(db.Model):

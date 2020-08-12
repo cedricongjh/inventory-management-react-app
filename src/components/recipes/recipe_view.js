@@ -45,7 +45,7 @@ class RecipeView extends Component {
                     <div className="ingredients-container">
                         <div className="recipe-text-wrapper">
                         <div style={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap', position: 'relative'}}>
-                        <div><img src={this.props.data.image_url} className='recipe-page-image' alt="dish"></img></div>
+                        <div><img src={this.props.data.url} className='recipe-page-image' alt="dish"></img></div>
                         <div className="sidenav">
                             <button className="recipe-edit-button" onClick={() => this.handleClick('editPopup')}>EDIT</button>
                             <button className="recipe-cook-button" onClick={() => this.handleClick('cookPopup')}>COOK</button>

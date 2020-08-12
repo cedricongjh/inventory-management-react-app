@@ -3,7 +3,6 @@ import Inventory from './inventory/inventory'
 import Recipes from './recipes/recipes'
 import {Route, NavLink, HashRouter} from 'react-router-dom'
 import RecipeView from './recipes/recipe_view'
-import items from './items'
 
 class App extends Component {
     constructor() {
@@ -17,9 +16,10 @@ class App extends Component {
     }
 
     componentDidMount() {
-      // get recipe data from API
-        this.setState({recipeData: items})
-        fetch('/inventory').then(response => response.json()).then(result => {
+      fetch('/recipes').then(response => response.json()).then(result => {
+        this.setState({recipeData: result})
+      })
+      fetch('/inventory').then(response => response.json()).then(result => {
           this.setState({inventoryData: result})
         })
     }

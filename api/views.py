@@ -35,6 +35,7 @@ class IngredientItem(Resource):
         name = request.json.get('name', '')
         measurement = request.json.get('measurement', '')
         url = request.json.get('url', '')
+        array_index = request.json.get('array_index', '')
          
         if quantity or quantity == 0:
             ingredient.quantity = quantity
@@ -43,7 +44,9 @@ class IngredientItem(Resource):
         if measurement:
             ingredient.measurement = measurement
         if url:
-            ingredient.url = url    
+            ingredient.url = url
+        if array_index:
+            ingredient.array_id = array_id       
         
         db.session.add(ingredient)
         db.session.commit()
@@ -62,8 +65,19 @@ class IngredientList(Resource):
         measurement = request.json.get('measurement', '')
         url = request.json.get('url', '')
         inventory_id = request.json.get('inventory_id', '')
+        ids = request.json.get('ids', '')
         
-        ingredient = Ingredient(name = name, quantity=quantity, measurement=measurement, url=url, inventory_id=inventory_id)
+        i = 0
+        if ids:
+            for id in ids:
+                ingredient = Ingredient.query.filter_by(id=id).first()
+                abort_if_not_exist(ingredient)
+
+                ingredient.array_id = i
+                i += 1
+                db.session.add(ingredient)
+
+        ingredient = Ingredient(name = name, quantity=quantity, measurement=measurement, url=url, inventory_id=inventory_id, array_id=i)
         ingredient_schema = IngredientSchema()
 
         db.session.add(ingredient)

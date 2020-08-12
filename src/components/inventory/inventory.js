@@ -19,9 +19,10 @@ class Inventory extends React.Component {
             items = items.map(item => {
                 item.edit = false
                 item.inServer = true
-            return item})
+                return item
+            })
             items.push({
-                id: items.length + 1,
+                array_id: items.length + 1,
                 name: "",
                 quantity: "",
                 measurement: "",
@@ -41,27 +42,27 @@ class Inventory extends React.Component {
         this.setState(prevState => {
             let updatedData = prevState.data.map(
                 item => {
-                    if (item.id === id) {
+                    if (item.array_id === id) {
                         item.edit = !item.edit
                     }
                     return item
                 }
             )
             for (let i = 0; i < updatedData.length; i++) {
-                updatedData[i].id = i + 1
+                updatedData[i].array_id = i + 1
             }
 
             if (id === updatedData.length) {
                 updatedData.push({
-                    id: prevState.data.length + 1,
+                    array_id: prevState.data.length + 1,
                     name: "",
                     quantity: "",
                     measurement: "",
                     image: "",
                     edit: false,
                     inServer: false
-                    })
-                }
+                })
+            }
             return {
                 data: updatedData
             }
@@ -80,12 +81,12 @@ class Inventory extends React.Component {
         })
     }
 
-    handleChange(event, id) {
+    handleChange(event, array_id) {
         const { name, value } = event.target
         this.setState(prevState => {
             const updatedData = prevState.data.map(
                 item => {
-                    if (item.id === id) {
+                    if (item.array_id === array_id) {
                         item[name] = value
                     }
                     return item
@@ -99,33 +100,35 @@ class Inventory extends React.Component {
 
     }
     // HANDLE POST OR PATCH REQUEST
-    handleSubmit(id) {
-        const data = { ...this.state.data[id - 1] }
+    handleSubmit(data) {
+        let ids = this.state.data.map(item => {
+            return item.inServer ? item.id : null
+        })
+        ids = ids.filter((value) => {
+            return value !== null
+        })
+        const newData = { ...data, ids : ids }
         if (data.inServer === false) {
             fetch('/inventory', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
+                body: JSON.stringify(newData)
             })
-                .then(response => {
-                    if (response.ok) {
-                        this.setState(prevState => {
-                            const updatedData = prevState.data.map(item => {
-                                if (item.id === id) {
-                                    item.edit = !item.edit
-                                    item.inServer = true
-                                }
-                                return item
-                            })
-                            return {
-                                data: updatedData
-                            }
-                        }, this.props.update(this.state.data))
-                    }
-                    return response.json()
-                })
+                .then(response => response.json())
                 .then(data => {
-                    console.log('success', data)
+                    this.setState(prevState => {
+                        const updatedData = prevState.data.map(item => {
+                            if (item.array_id === newData.array_id) {
+                                item.edit = !item.edit
+                                item.inServer = true
+                                item.id = data.id
+                            }
+                            return item
+                        })
+                        return {
+                            data: updatedData
+                        }
+                    }, this.props.update(this.state.data), console.log('success', data))
                 })
                 .catch((error) => {
                     console.error('Error:', error);
@@ -141,7 +144,7 @@ class Inventory extends React.Component {
                     if (response.ok) {
                         this.setState(prevState => {
                             const updatedData = prevState.data.map(item => {
-                                if (item.id === id) {
+                                if (item.array_id === data.array_id) {
                                     item.edit = !item.edit
                                 }
                                 return item
@@ -151,6 +154,7 @@ class Inventory extends React.Component {
                             }
                         }, this.props.update(this.state.data))
                     }
+                    console.log(this.state.data)
                     return response.json()
                 })
                 .then(data => {
@@ -166,15 +170,15 @@ class Inventory extends React.Component {
         this.setState(prevState => {
             let updatedData = prevState.data.map(
                 item => {
-                    if (item.inServer && item.id === id) {
+                    if (item.inServer && item.array_id === id) {
                         for (let k = 0; k < prevState.lastClickData.length; k++) {
-                            if (prevState.lastClickData[k].id === id) {
+                            if (prevState.lastClickData[k].array_id === id) {
                                 item = prevState.lastClickData[k]
                             }
                         }
                         item.edit = false
                     }
-                    else if (item.inServer === false && item.id === id) {
+                    else if (item.inServer === false && item.array_id === id) {
                         item.edit = !item.edit
                         item.quantity = ''
                         item.measurement = ''
@@ -184,14 +188,14 @@ class Inventory extends React.Component {
                     return item
                 }
             ).filter(item => {
-                if (item.edit === false && item.inServer === false && item.id === id) {
+                if (item.edit === false && item.inServer === false && item.array_id === id) {
                     return false
                 }
                 return true
             }
             )
             for (let i = 0; i < updatedData.length; i++) {
-                updatedData[i].id = i + 1
+                updatedData[i].array_id = i + 1
             }
             return {
                 data: updatedData
@@ -201,7 +205,7 @@ class Inventory extends React.Component {
         this.setState(prevState => {
             const newData = prevState.lastClickData.filter(
                 item => {
-                    if (item.id === id) {
+                    if (item.array_id === id) {
                         return false
                     }
                     return true
@@ -214,7 +218,7 @@ class Inventory extends React.Component {
     }
 
     render() {
-        const items = this.state.data.map(item => <InventoryItem info={item} key={item.id} handleClick={this.handleClick} handleChange={this.handleChange}
+        const items = this.state.data.map(item => <InventoryItem info={item} key={item.array_id} handleClick={this.handleClick} handleChange={this.handleChange}
             handleSubmit={this.handleSubmit} handleCancel={this.handleCancel} />)
         return (
             <div className="inventory">
