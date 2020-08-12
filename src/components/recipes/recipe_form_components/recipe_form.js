@@ -9,8 +9,8 @@ function RecipeForm(props) {
         name: '',
         categories: [''],
         description: '',
-        time: { hours: '', minutes: '' },
-        servings: '',
+        time: { hour: 0, minute: 0 },
+        servings: 0,
         ingredients: [{
             name: '',
             quantity: '',
@@ -20,7 +20,6 @@ function RecipeForm(props) {
         instructions: ['']
     }
     const onSubmit = (values) => {
-        console.log(values)
         if (props.type === 'editPopup') {
             fetch('recipe/' + props.data.id, {
                 method: "PATCH",
@@ -39,7 +38,18 @@ function RecipeForm(props) {
                 console.error('Error:', error);
             })  
         } else if (props.type === 'formPopup') {
-            
+            fetch('recipes', {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(values)        
+            }).then(response => response.json())
+            .then(data => {
+                props.updateRecipe(data, true)
+                props.handleClick(props.type)
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            })      
         }
     }
     const validationSchema = yup.object().shape({
@@ -47,8 +57,8 @@ function RecipeForm(props) {
         categories: yup.array().of(yup.string()),
         description: yup.string(),
         time: yup.object().shape({
-            hours: yup.number().typeError('Hours must be a number'),
-            minutes: yup.number().typeError('Minutes must be a number')
+            hour: yup.number().required('Required').typeError('Hours must be a number'),
+            minute: yup.number().required('Required').typeError('Minutes must be a number')
         }),
         servings: yup.number().typeError('Servings must be a number'),
         ingredients: yup.array().of(yup.object().shape({
@@ -108,14 +118,14 @@ function RecipeForm(props) {
                 <div>Time required: </div>
                 <div style={{ display: 'flex', flexDirection: "column" }}>
                     <label htmlFor="time.hours">Hours</label>
-                    <Field className="rounded-input" name="time.hours" />
-                    <ErrorMessage name="time.hours" />
+                    <Field className="rounded-input" name="time.hour" />
+                    <ErrorMessage name="time.hour" />
                 </div>
 
                 <div style={{ display: 'flex', flexDirection: "column" }}>
                     <label htmlFor="time.minutes">Minutes</label>
-                    <Field className="rounded-input" name="time.minutes" />
-                    <ErrorMessage name="time.minutes" />
+                    <Field className="rounded-input" name="time.minute" />
+                    <ErrorMessage name="time.minute" />
                 </div>
 
                 <div style={{ display: 'flex', flexDirection: "column" }}>
