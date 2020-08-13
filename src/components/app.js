@@ -1,6 +1,8 @@
 import React, { Component } from "react"
 import Inventory from './inventory/inventory'
 import Recipes from './recipes/recipes'
+import ShoppingLists from './shoppinglists/shoppinglists'
+import Home from './home/home'
 import { Route, NavLink, HashRouter } from 'react-router-dom'
 import RecipeView from './recipes/recipe_view'
 
@@ -97,11 +99,13 @@ class App extends Component {
           <li><NavLink exact to="/">Home</NavLink></li>
           <li><NavLink to="/inventory">Inventory</NavLink></li>
           <li><NavLink to="/recipes">Recipes</NavLink></li>
+          <li><NavLink to="/shoppinglists">Shopping Lists</NavLink></li>
         </ul>
         <div className="content">
-          <Route exact path='/'></Route>
+          <Route exact path='/' render={(props) => <Home {...props}></Home>}></Route>
           <Route path='/inventory' render={(props) => <Inventory {...props} update={this.updateInventory} />}></Route>
-          <Route exact path='/recipes' render= {(props) => <Recipes {...props} recipeData={this.state.recipeData}/>}></Route>
+          <Route exact path='/recipes' render= {(props) => <Recipes {...props} recipeData={this.state.recipeData} updateRecipe={this.updateRecipe}/>}></Route>
+          <Route exact path='/shoppinglists' render={(props) => <ShoppingLists {...props}/>}></Route>
           {recipeLinks}
         </div>
 
