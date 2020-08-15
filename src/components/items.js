@@ -1,84 +1,99 @@
 const items = [
-                {id : 1,
-                name: 'Chocolate PB oats', 
-                image_url: '/images/chocolate_pb_oats.png',
-                categories: ['breakfast', 'vegan'],
-                ingredients: [{name: 'rolled oats',
-                               quantity: 0.75,
-                               measurement: 'cup',
-                               ignore: false
-                              },
-                              {name: 'cocoa powder',
-                               quantity: 1,
-                               measurement: 'cup',
-                               ignore: false
-                              }, 
-                              {name: 'banana',
-                              quantity: 1,
-                              measurement: 'pcs',
-                              ignore: false
-                              },
-                              {name: 'strawberry',
-                              quantity: 1,
-                              measurement: 'cup',
-                              ignore: false
-                              },
-                              {name: 'peanut butter',
-                              quantity: 1,
-                              measurement: 'serving',
-                              ignore: false}
-                             ],
-                time: {hours: 0, minutes: 10},
-                servings: 1,             
-                description: 'Yummy peanut butter oats to start the day with.',  
-                instructions: ['Cut up strawberries and bananas', 
-                               'Bring water to a boil in a pot', 
-                               'Cook oats for 3 mins, mixing in cocoa powder',
-                               'Pour the oats into a bowl. Add bananas and strawberries, and peanut butter to top it off and serve']
-                }, 
-                {id : 2,
-                    name: 'Vegan mac and cheese', 
-                    image_url: '/images/vegan_mac_and_cheese.png',
-                    categories: ['lunch', 'dinner', 'vegan', 'breakfast'],
-                    ingredients: [{name: 'macadamias',
-                                   quantity: 0.5,
-                                   measurement: 'cup',
-                                   ignore: false
-                                  },
-                                  {name: 'carrot',
-                                   quantity: 1,
-                                   measurement: 'pcs',
-                                   ignore: false
-                                  }, 
-                                  {name: 'nutritional yeast',
-                                  quantity: 0.25,
-                                  measurement: 'cup',
-                                  ignore: false
-                                  },
-                                  {name: 'white vinegar',
-                                  quantity: 1,
-                                  measurement: 'tsp',
-                                  ignore: false
-                                  },
-                                  {name: 'ground nutmeg',
-                                  quantity: 0.125,
-                                  measurement: 'tsp',
-                                  ignore: false
-                                  },
-                                  {name: 'pasta',
-                                  quantity: 3,
-                                  measurement: 'serving',
-                                  ignore: false
-                                  },  
-                                 ],
-                    time: {hours: 0, minutes: 20},
-                    servings: 2,             
-                    description: 'Healthy and low-carb vegan mac and cheese',
-                    instructions: ['Add macadamias, carrot, nutritional yeast, white vinegar, ground nutmeg into a blender and blend to create the vegan cheese sauce', 
-                                   'Boil water and add the pasta in. Cook for 5 mins', 
-                                   'Place the pasta in a bowl, pour the cheese sauce over it and serve'
-                                  ] 
-                }               
-                ] 
- 
+    {
+        'name': 'shopping list',
+        'array_index': 0,
+        'categories': [
+            {
+                'category': 'ingredients',
+                'addToPantry': true,
+                'category_index': 0,
+                'items': [
+                    {
+                        'name': 'salt',
+                        'quantity': 100,
+                        'measurement': 'tsp',
+                        'item_index': 0,
+                        'bought': false
+                    },
+                    {
+                        'name': 'pasta',
+                        'quantity': 10,
+                        'measurement': 'servings',
+                        'item_index': 1,
+                        'bought': false
+                    },
+                    {
+                        'name': 'carrot',
+                        'quantity': 5,
+                        'measurement': 'pcs',
+                        'item_index': 2,
+                        'bought': false
+                    },
+                ]
+            },
+            {
+                'category': 'stationary',
+                'category_index': 1,
+                'items': [
+                    {
+                        'name': '5 pencils',
+                        'item_index': 0,
+                        'bought': false
+                    },
+                    {
+                        'name': 'erasers',
+                        'item_index': 1,
+                        'bought': false
+                    }
+                ]
+            },
+            {
+                'category': 'snacks',
+                'category_index': 2,
+                'items': [
+                    {
+                        'name': 'potato chips',
+                        'item_index': 0,
+                        'bought': false
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        'name': 'monthly shopping list',
+        'array_index': 1,
+        'categories': [
+            {
+                'category': 'snacks',
+                'category_index': 0,
+                'items': [
+                    {
+                        'name': 'pringles',
+                        'item_index': 0,
+                        'bought': false
+                    },
+                    {
+                        'name': 'icecream',
+                        'item_index': 1,
+                        'bought': false
+                    }
+                ]
+            },
+            {
+                'category': 'drinks',
+                'category_index': 1,
+                'items': [
+                    {
+                        'name': '1.5L coke',
+                        'item_index': 0,
+                        'bought': false
+                    }
+                ]
+            }
+        ]
+    }
+]
+
+
 export default items

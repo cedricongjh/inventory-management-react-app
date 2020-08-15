@@ -5,13 +5,15 @@ import ShoppingLists from './shoppinglists/shoppinglists'
 import Home from './home/home'
 import { Route, NavLink, HashRouter } from 'react-router-dom'
 import RecipeView from './recipes/recipe_view'
+import items from './items'
 
 class App extends Component {
   constructor() {
     super()
     this.state = {
       recipeData: [],
-      inventoryData: []
+      inventoryData: [],
+      shoppinglistData: []
     }
     this.updateInventory = this.updateInventory.bind(this)
     this.updateIngredient = this.updateIngredient.bind(this)
@@ -20,6 +22,7 @@ class App extends Component {
   }
 
   componentDidMount() {
+    this.setState({shoppinglistData: items})
     fetch('/recipes').then(response => response.json()).then(result => {
       this.setState({ recipeData: result })
     })
@@ -105,7 +108,7 @@ class App extends Component {
           <Route exact path='/' render={(props) => <Home {...props}></Home>}></Route>
           <Route path='/inventory' render={(props) => <Inventory {...props} update={this.updateInventory} />}></Route>
           <Route exact path='/recipes' render= {(props) => <Recipes {...props} recipeData={this.state.recipeData} updateRecipe={this.updateRecipe}/>}></Route>
-          <Route exact path='/shoppinglists' render={(props) => <ShoppingLists {...props}/>}></Route>
+          <Route exact path='/shoppinglists' render={(props) => <ShoppingLists {...props} data={this.state.shoppinglistData}/>}></Route>
           {recipeLinks}
         </div>
 
