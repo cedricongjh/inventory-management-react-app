@@ -24,13 +24,14 @@ class ShoppingListCard extends Component {
     }
 
     render() {
-        const categories = this.props.data.categories.map(category => {
+        const categories = this.props.data.categoryOrder.map(key => {
+            const category = this.props.data.categories[key]
             const bought = category.items.reduce((currentValue, item) => {
-                return item.bought? currentValue + 1: currentValue
+                return this.props.data.items[item].bought? currentValue + 1: currentValue
             }, 0)
             const total = category.items.length
             return(
-            <div key={category.category} style={{fontSize:'1.1em'}}>{category.category}: {bought}/{total}</div>
+            <div key={category.name} style={{fontSize:'1.1em'}}>{category.name}: {bought}/{total}</div>
             )
         })
         return (

@@ -5,7 +5,7 @@ import ShoppingLists from './shoppinglists/shoppinglists'
 import Home from './home/home'
 import { Route, NavLink, HashRouter } from 'react-router-dom'
 import RecipeView from './recipes/recipe_view'
-import items from './items'
+import testitems from './testitems'
 
 class App extends Component {
   constructor() {
@@ -22,7 +22,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.setState({shoppinglistData: items})
+    this.setState({shoppinglistData: testitems})
     fetch('/recipes').then(response => response.json()).then(result => {
       this.setState({ recipeData: result })
     })

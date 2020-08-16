@@ -1,13 +1,14 @@
 import React from 'react'
 
 function PopUpContent(props) {
-    const categories = props.data.categories.map(category => {
+    const categories = props.data.categoryOrder.map(key => {
+        const category = props.data.categories[key]
         let items = category.items.map(item => {
-        return (<div key={item.name}><input type="checkbox"/>{item.name} {item.quantity} {item.measurement}</div>)
+        return (<div key={props.data.items[item].name}><input type="checkbox"/>{props.data.items[item].name} {props.data.items[item].name.quantity} {props.data.items[item].name.measurement}</div>)
         })
         return (
-            <div style={{ display: 'flex', flexDirection: 'column' }} key={category.category}>
-                <div style={{fontSize: '1.35em', textDecoration: 'underline'}}>{category.category}</div>
+            <div style={{ display: 'flex', flexDirection: 'column' }} key={category.name}>
+                <div style={{fontSize: '1.35em', textDecoration: 'underline'}}>{category.name}</div>
                 {items}
             </div>)
     }
