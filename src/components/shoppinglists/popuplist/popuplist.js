@@ -1,5 +1,5 @@
 import React from 'react'
-import PopUpContent from './popupcontent'
+import DragList from './drag and drop/draglist'
 
 function PopUpList(props) {
     return(
@@ -8,7 +8,7 @@ function PopUpList(props) {
             <span className="close" onClick={() => props.handleClick('editPopup')}>
             X
             </span>
-                <PopUpContent data={props.data}/>
+                <DragList data={props.data} updateShoppingList={props.updateShoppingList}/>
             </div>
         </div>
     )

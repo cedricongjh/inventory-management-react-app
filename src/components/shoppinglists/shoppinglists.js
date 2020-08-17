@@ -3,7 +3,7 @@ import ShoppingListCard from './shoppinglistcard'
 
 function ShoppingLists(props) {
     const shoppinglists = props.data.map(shoppinglist => {
-        return(<ShoppingListCard key={shoppinglist.name} data={shoppinglist} />)
+        return(<ShoppingListCard key={shoppinglist.name} data={shoppinglist} updateShoppingList={props.updateShoppingList}/>)
     })
 
     return (

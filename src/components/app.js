@@ -7,6 +7,7 @@ import { Route, NavLink, HashRouter } from 'react-router-dom'
 import RecipeView from './recipes/recipe_view'
 import testitems from './testitems'
 
+
 class App extends Component {
   constructor() {
     super()
@@ -19,6 +20,7 @@ class App extends Component {
     this.updateIngredient = this.updateIngredient.bind(this)
     this.ignoreIngredient = this.ignoreIngredient.bind(this)
     this.updateRecipe = this.updateRecipe.bind(this)
+    this.updateShoppingList = this.updateShoppingList.bind(this)
   }
 
   componentDidMount() {
@@ -89,6 +91,20 @@ class App extends Component {
     })
   }
 
+  updateShoppingList(shoppinglist) {
+    this.setState(
+      prevState => {
+        const prevData = prevState.shoppinglistData
+        for (let i=0; i<prevData.length; i ++) {
+          if (prevData[i].id === shoppinglist.id) {
+            prevData[i] = shoppinglist 
+          }
+        }
+        return ({shoppinglistData: prevData})
+      }, console.log(this.state.shoppinglistData)
+    )
+  }
+
   render() {
     const recipeLinks = this.state.recipeData.map(item => {
       let recipeData = item
@@ -105,10 +121,10 @@ class App extends Component {
           <li><NavLink to="/shoppinglists">Shopping Lists</NavLink></li>
         </ul>
         <div className="content">
-          <Route exact path='/' render={(props) => <Home {...props}></Home>}></Route>
+          <Route exact path='/' render={(props) => <Home {...props} />}></Route>
           <Route path='/inventory' render={(props) => <Inventory {...props} update={this.updateInventory} />}></Route>
           <Route exact path='/recipes' render= {(props) => <Recipes {...props} recipeData={this.state.recipeData} updateRecipe={this.updateRecipe}/>}></Route>
-          <Route exact path='/shoppinglists' render={(props) => <ShoppingLists {...props} data={this.state.shoppinglistData}/>}></Route>
+          <Route exact path='/shoppinglists' render={(props) => <ShoppingLists {...props} data={this.state.shoppinglistData} updateShoppingList={this.updateShoppingList}/>}></Route>
           {recipeLinks}
         </div>
 

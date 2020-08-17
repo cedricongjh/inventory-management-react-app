@@ -40,7 +40,7 @@ class ShoppingListCard extends Component {
                     <div style={{paddingTop: '1em', fontSize: '1.5em'}}>{this.props.data.name}</div>
                     {categories}
                 </div>
-                {this.state.popUp? <PopUpList handleClick={this.handleClick} data={this.props.data}/> : null}
+                {this.state.popUp? <PopUpList handleClick={this.handleClick} data={this.props.data} updateShoppingList={this.props.updateShoppingList}/> : null}
             </div>
         )
     }
