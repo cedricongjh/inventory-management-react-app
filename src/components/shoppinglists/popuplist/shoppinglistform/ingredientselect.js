@@ -1,23 +1,31 @@
 import React from 'react'
 import CreatableSelect from 'react-select/creatable'
+import CreateIngredient from './createingredient'
+
+// requires inventorydata, updateInventory
 
 class IngredientSelect extends React.Component {
 	constructor() {
 		super()
 		this.state = {
 			value: null,
-			options: todosData,
 			isLoading: false,
 			popupform: null
 		}
 	}
 
 	updateField = (values) => {
-        const newOption = this.createOption(values.name)
-        this.setState(prevState => 
-            {
-                return {value: newOption, options: [...prevState.options, newOption], isLoading: false, popupform: null}}
-                )
+		if (!values) {
+			this.setState(prevState => {
+				return {value: prevState.value, isLoading: false, popupform: null}
+			})
+			return
+		}
+		const newOption = this.createOption(values.name)
+		this.props.updateInventory([...this.props.data, {...values, 'quantity': 0}])
+        this.setState( 
+            {value: newOption, isLoading: false, popupform: null}
+				)			
 	}
 
 	createOption = (label) => ({
@@ -35,13 +43,13 @@ class IngredientSelect extends React.Component {
 
 	handleCreate = (inputValue) => {
 		this.setState({ isLoading: true })
-		this.setState({popup: true, popupform: <PopUpForm name={inputValue} updateField={this.updateField}/>})
+		this.setState({popupform: <CreateIngredient name={inputValue} updateField={this.updateField}/>})
 	}
 
 
 	render() {
-		const checklistitems = this.state.options.map(todo => {
-			return ({ 'label': [todo.text], 'value': [todo.text] })
+		const checklistitems = this.props.data.map(ingredient=> {
+			return {'label': ingredient.name, 'value': ingredient.name}
 		})
 		return (
 			<div>
