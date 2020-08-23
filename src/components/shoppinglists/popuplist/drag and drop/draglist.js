@@ -9,7 +9,7 @@ class DragList extends Component {
     }
 
     onDragEnd(result) {
-        const {draggableId, type, destination, source} = result
+        const { draggableId, type, destination, source } = result
         if (type === "column") {
             let newColumnOrder = Array.from(this.props.data.categoryOrder)
             newColumnOrder.splice(source.index, 1)
@@ -19,14 +19,14 @@ class DragList extends Component {
                 categoryOrder: newColumnOrder
             }
             this.props.updateShoppingList(newState)
-            return       
+            return
         }
 
         if (!destination) {
             return
         }
 
-        if (destination.droppableId === source.droppableId && 
+        if (destination.droppableId === source.droppableId &&
             destination.index === source.index) {
             return
         }
@@ -40,7 +40,7 @@ class DragList extends Component {
             newItemOrder.splice(destination.index, 0, draggableId)
             const newCategory = {
                 ...start,
-                items: newItemOrder 
+                items: newItemOrder
             }
 
             const newState = {
@@ -58,7 +58,7 @@ class DragList extends Component {
         let startItemOrder = Array.from(start.items)
         let endItemOrder = Array.from(end.items)
         startItemOrder.splice(source.index, 1)
-        endItemOrder.splice(destination.index, 0 , draggableId)
+        endItemOrder.splice(destination.index, 0, draggableId)
         const newState = {
             ...this.props.data,
             categories: {
@@ -85,12 +85,12 @@ class DragList extends Component {
                 return (
                     <Draggable key={this.props.data.items[item].name} index={index} draggableId={this.props.data.items[item].name} >
                         {(provided) => <div
-                            key = {index}
+                            key={index}
                             ref={provided.innerRef}
                             {...provided.draggableProps}>
-                            <div style={{display: 'flex', flexDirection: 'row'}}>
-                            <input type="checkbox" />
-                            <div {...provided.dragHandleProps}>{this.props.data.items[item].name} {this.props.data.items[item].quantity} {this.props.data.items[item].measurement}</div>
+                            <div style={{ display: 'flex', flexDirection: 'row' }}>
+                                <input type="checkbox" />
+                                <div {...provided.dragHandleProps}>{this.props.data.items[item].name} {this.props.data.items[item].quantity} {this.props.data.items[item].measurement}</div>
                             </div>
                         </div>}
                     </Draggable>)
@@ -103,14 +103,14 @@ class DragList extends Component {
                                 ref={provided.innerRef}
                                 {...provided.draggableProps}>
                                 <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                    <div style={{ fontSize: '1.35em', textDecoration: 'underline'}} {...provided.dragHandleProps}>{category.name}</div>
+                                    <div style={{ fontSize: '1.35em', textDecoration: 'underline' }} {...provided.dragHandleProps}>{category.name}</div>
                                     <Droppable droppableId={category.name}>
-                                        
+
                                         {(provided) =>
                                             <div key={category.name} ref={provided.innerRef} {...provided.droppableProps} >
                                                 <div style={{ display: 'flex', flexDirection: 'column', minHeight: '2em' }}>
-                                                {items}
-                                                {provided.placeholder}
+                                                    {items}
+                                                    {provided.placeholder}
                                                 </div>
                                             </div>}
 
@@ -130,6 +130,10 @@ class DragList extends Component {
                             <div className='shoppinglist-content'>
                                 <div style={{ display: 'flex', flexDirection: 'column' }}>
                                     <div style={{ fontSize: '1.5em', display: 'flex' }}>{this.props.data.name}</div>
+                                    <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+                                        <button className="inventory-save-button" onClick={() => { this.props.changeMode('reorder', 'view') }}>SAVE</button>
+                                        <button className="inventory-cancel-button" onClick={() => { this.props.changeMode('reorder', 'view') }}>CANCEL</button>
+                                    </div>
                                     <div style={{ display: 'flex', flexDirection: 'column', alignContent: 'flex-start' }}>
                                         {categories}
                                     </div>

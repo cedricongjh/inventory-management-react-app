@@ -4,7 +4,7 @@ function PopUpContent(props) {
     const categories = props.data.categoryOrder.map(key => {
         const category = props.data.categories[key]
         let items = category.items.map(item => {
-        return (<div key={props.data.items[item].name}><input type="checkbox"/>{props.data.items[item].name} {props.data.items[item].name.quantity} {props.data.items[item].name.measurement}</div>)
+        return (<div key={props.data.items[item].name}><input type="checkbox"/>{props.data.items[item].name} {props.data.items[item].quantity} {props.data.items[item].measurement}</div>)
         })
         return (
             <div style={{ display: 'flex', flexDirection: 'column' }} key={category.name}>
@@ -18,6 +18,10 @@ function PopUpContent(props) {
         <div className='shoppinglist-content'>
             <div style={{ display: 'flex', flexDirection: 'column' }}>
                 <div style={{ fontSize: '1.5em', display: 'flex' }}>{props.data.name}</div>
+                <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'center'}}>
+                    <button className="inventory-save-button" onClick={() => {props.changeMode('view', 'edit')}}>EDIT</button>
+                    <button className="inventory-save-button" onClick={() => {props.changeMode('view', 'reorder')}}>REORDER</button>
+                </div>
                 <div style={{ display: 'flex', flexDirection: 'column', alignContent: 'flex-start' }}>{categories}</div>
             </div>
         </div>

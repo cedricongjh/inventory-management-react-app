@@ -259,3 +259,12 @@ input, textarea {
   align-items: center;
   flex-direction: column;
 }
+
+.shoppinglist-content input{
+  border: none;
+  border-bottom: 1px solid #0099FF;
+}
+
+.shoppinglist-content input:focus{
+  border: 1px solid #0099FF;
+}
