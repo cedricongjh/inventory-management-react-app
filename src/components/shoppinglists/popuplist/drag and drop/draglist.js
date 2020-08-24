@@ -5,7 +5,12 @@ class DragList extends Component {
 
     constructor() {
         super()
+        this.state = {initialState: ''}
         this.onDragEnd = this.onDragEnd.bind(this)
+    }
+
+    componentDidMount() {
+        this.setState({initialState: this.props.data})      
     }
 
     onDragEnd(result) {
@@ -131,8 +136,11 @@ class DragList extends Component {
                                 <div style={{ display: 'flex', flexDirection: 'column' }}>
                                     <div style={{ fontSize: '1.5em', display: 'flex' }}>{this.props.data.name}</div>
                                     <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
-                                        <button className="inventory-save-button" onClick={() => { this.props.changeMode('reorder', 'view') }}>SAVE</button>
-                                        <button className="inventory-cancel-button" onClick={() => { this.props.changeMode('reorder', 'view') }}>CANCEL</button>
+                                        <button className="inventory-save-button" onClick={() => { this.props.changeMode('reorder', 'view') }}>
+                                            SAVE</button>
+                                        <button className="inventory-cancel-button" onClick={async () => { return (await this.props.updateShoppingList(this.state.initialState), 
+                                            await this.props.changeMode('reorder', 'view')) }}>
+                                            CANCEL</button>
                                     </div>
                                     <div style={{ display: 'flex', flexDirection: 'column', alignContent: 'flex-start' }}>
                                         {categories}
